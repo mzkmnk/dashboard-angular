@@ -3,13 +3,16 @@
     <!-- <div class="h-16 px-3"></div> -->
     <!-- メインコンテンツ -->
     <div class="flex h-full flex-row bg-gradient-to-r from-[rgba(241,242,255,1)] to-[rgba(255,247,252,1)]">
-        <div class="h-full w-1/5 border-r" [@sidebarAnimation] = " isOpenTaskStatusSidebar() ? 'open':'close' ">
+        <div class="h-full w-1/4 border-r" [@sidebarAnimation] = " isOpenTaskStatusSidebar() ? 'open':'close' ">
             <p-button icon="pi pi-align-left" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickIsOpenTaskStatusSidebar()"></p-button>
+            <div class="px-5">
+                <p-meterGroup styleClass="pt-4" [value]="meterItems" labelOrientation="vertical" [max]="tasksData.length"></p-meterGroup>
+            </div>
         </div>
         @if(!isOpenTaskStatusSidebar()){
             <p-button icon="pi pi-align-left" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickIsOpenTaskStatusSidebar()"></p-button>
         }
-        <div class="h-full w-full px-14 pt-[0.5]">
+        <div class="h-full w-full px-14 pt-1">
             <div class="flex w-full items-center justify-between pb-10">
                 <h1 class="font-bold">Tasks</h1>
                 <div class="flex gap-2">
@@ -26,7 +29,7 @@
                             <i class="pi pi-ellipsis-h text-xl opacity-60 hover:opacity-100"></i>
                         </div>
                         <div class="scrollbar h-[calc(100vh-150px)] overflow-auto">
-                            @for(task of TasksData;let j = $index; track j){
+                            @for(task of tasksData;let j = $index; track j){
                                 @if(task.status === status){
                                     <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-lg shadow-slate-100">
                                         <div class="flex flex-row gap-2">

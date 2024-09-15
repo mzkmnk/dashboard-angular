@@ -4,7 +4,7 @@ import { Component, signal,  WritableSignal } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
-import { MeterGroupModule } from 'primeng/metergroup';
+import { MeterGroupModule, MeterItem } from 'primeng/metergroup';
 import { TagModule } from 'primeng/tag';
 
 export type AvatarInterface = {
@@ -20,6 +20,10 @@ export type AvatarInterface = {
 export type TaskStatus = 'Ready' | 'On Progress' | 'Needs Review' | 'Done';
 
 export type colorTheme = '#de89ea' | '#46bd83' | '#07a0f7';
+
+export type CustomMeterItem = {
+  label: TaskStatus
+} & MeterItem
 
 export type TaskData = {
   status        : TaskStatus,
@@ -46,7 +50,7 @@ export type TaskData = {
   animations: [
     trigger('sidebarAnimation',[
       state('open',style({
-        width   : '20%',
+        width   : '25%',
         opacity : 1
       })),
       state('close',style({
@@ -63,7 +67,37 @@ export class HomeComponent {
 
   isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(true);
 
+  taskStatus: TaskStatus[] = [
+    'Ready','On Progress','Needs Review','Done' 
+  ];
+
+  taskStatusColor: {[key in TaskStatus]: string } = {
+    'Ready'       : '#de89ea',
+    'On Progress' : '#46bd83',
+    'Needs Review': '#07a0f7',
+    'Done'        : '#f3dff5'
+  }
+
+  meterItems: CustomMeterItem[];
+
+  constructor(){
+    this.tasksData = this.tasksData.sort((a,b) => a.endDate.getTime() - b.endDate.getTime());
+    this.meterItems = this.getStatusRatio(this.tasksData);
+  }
+
   onClickIsOpenTaskStatusSidebar = ():void => this.isOpenTaskStatusSidebar.update((value) => !value);
+
+  getStatusRatio = (tasksStatus: TaskData[]):CustomMeterItem[] => {
+    const meterItems : CustomMeterItem[] = [
+      {label: 'Ready',value: tasksStatus.filter((task) => task.status === 'Ready').length,color: this.taskStatusColor.Ready},
+      {label: 'On Progress',value: tasksStatus.filter((task) => task.status === 'On Progress').length,color: this.taskStatusColor['On Progress']},
+      {label: 'Needs Review',value: tasksStatus.filter((task) => task.status === 'Needs Review').length,color: this.taskStatusColor['Needs Review']},
+      {label: 'Done',value: tasksStatus.filter((task) => task.status === 'Done').length,color: this.taskStatusColor.Done}
+    ];
+    return meterItems;
+  }
+
+  // ここからサンプルデータ
 
   mockDataAvatars: AvatarInterface[] = [
     {
@@ -82,11 +116,7 @@ export class HomeComponent {
     }
   ]
 
-  taskStatus: TaskStatus[] = [
-    'Ready','On Progress','Needs Review','Done' 
-  ];
-
-  TasksData: TaskData[] = [
+  tasksData: TaskData[] = [
     {
       status      : 'Ready',
       title       : 'デザインを作成する',
