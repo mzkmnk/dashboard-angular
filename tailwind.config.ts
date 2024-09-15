@@ -4,7 +4,16 @@ import plugin from 'tailwindcss/plugin';
 export default {
   content : [ './src/**/*.{html,ts}', ],
   theme   : {
-    extend: {},
+    extend: {
+      colors: {
+        'pink-primary'    : '#de89ea',
+        'pink-secondary'  : '#f3dff5',
+        'green-primary'   : '#46bd83',
+        'green-secondary' : '#d5ede2',
+        'blue-primary'    : '#07a0f7',
+        'blue-secondary'  : '#ceecfd',
+      }
+    },
   },
   plugins: [
     plugin(function({ addBase , theme  }) {
