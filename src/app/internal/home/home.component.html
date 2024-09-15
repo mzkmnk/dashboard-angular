@@ -1,7 +1,28 @@
 <div class="h-screen w-screen">
-    <div class="h-16"></div>
-    <div class="dashboard-wrapper h-full w-screen">
-        <div class="h-full w-4/5 border-r"></div>
-    <div class="h-full w-1/5"></div>
+    <!-- ヘッダー -->
+    <!-- <div class="h-16 px-3"></div> -->
+    <!-- メインコンテンツ -->
+    <div class="flex flex-row bg-gradient-to-r from-[rgba(241,242,255,1)] to-[rgba(255,247,252,1)] h-full">
+        <div class="h-full w-4/5 border-r px-14 pt-8">
+            <div class="pb-10 flex w-full items-center justify-between">
+                <h1 class="font-bold">Tasks</h1>
+                <div class="flex gap-2">
+                    @for(avatar of mockDataAvatars;let index = $index; track index){
+                        <p-avatar [style]="avatar.style" [label]="avatar.label" [size]="avatar.size" [shape]="avatar.shape"></p-avatar>
+                    }
+                </div>
+            </div>
+            <div class="h-[85%] grid-cols-4 grid gap-8">
+                @for(value of taskStatus;let index = $index; track index){
+                    <div class="h-auto">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-medium">{{value}}</h4>
+                            <i class="text-xl opacity-60 hover:opacity-100 pi pi-ellipsis-h"></i>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="h-full w-1/5"></div>
     </div>
 </div>
