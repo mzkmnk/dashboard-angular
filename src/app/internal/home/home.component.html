@@ -9,7 +9,7 @@
         @if(!isOpenTaskStatusSidebar()){
             <p-button icon="pi pi-align-left" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickIsOpenTaskStatusSidebar()"></p-button>
         }
-        <div class="h-full w-full overflow-hidden px-14 pt-[0.5]">
+        <div class="h-full w-full px-14 pt-[0.5]">
             <div class="flex w-full items-center justify-between pb-10">
                 <h1 class="font-bold">Tasks</h1>
                 <div class="flex gap-2">
@@ -20,12 +20,12 @@
             </div>
             <div class="grid grid-cols-4 gap-8">
                 @for(status of taskStatus;let i = $index; track i){
-                    <div class="h-auto">
+                    <div class="flex h-full flex-col">
                         <div class="flex items-center justify-between pb-5">
                             <h4 class="font-medium">{{ status }}</h4>
                             <i class="pi pi-ellipsis-h text-xl opacity-60 hover:opacity-100"></i>
                         </div>
-                        <div class="scrollbar h-[80%] overflow-y-auto">
+                        <div class="scrollbar h-[calc(100vh-150px)] overflow-auto">
                             @for(task of TasksData;let j = $index; track j){
                                 @if(task.status === status){
                                     <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-lg shadow-slate-100">
