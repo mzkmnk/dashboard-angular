@@ -1,10 +1,11 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { DatePipe } from '@angular/common';
 import { Component, signal,  WritableSignal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
+import { ButtonModule } from 'primeng/button';
+import { MeterGroupModule } from 'primeng/metergroup';
 import { TagModule } from 'primeng/tag';
-import { DatePipe } from '@angular/common';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 
 export type AvatarInterface = {
   path  : string,
@@ -40,6 +41,7 @@ export type TaskData = {
     AvatarGroupModule,
     TagModule,
     DatePipe,
+    MeterGroupModule
   ],
   animations: [
     trigger('sidebarAnimation',[
