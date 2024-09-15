@@ -4,6 +4,7 @@ import angular from 'angular-eslint';
 import gitignore from 'eslint-config-flat-gitignore';
 import ngrx from '@ngrx/eslint-plugin/v9/index.js';
 import stylistic from '@stylistic/eslint-plugin';
+import tailwind from "eslint-plugin-tailwindcss";
 
 export default tsEslint.config(
   gitignore(),
@@ -19,8 +20,21 @@ export default tsEslint.config(
     extends: [
       eslint.configs.recommended,
       ...tsEslint.configs.strict,
-      ...tsEslint.configs.stylistic
+      ...tsEslint.configs.stylistic,
     ]
+  },
+
+  // tailwind config
+  {
+    files: ['**/*.component.html'],
+    plugins: {
+      'tailwindcss': tailwind
+    },
+    rules: {
+      'tailwindcss/classnames-order': 'error',
+      "tailwindcss/no-custom-classname": "warn",
+      "tailwindcss/no-contradicting-classname": "error"
+    }
   },
 
   // eslint stylistic
