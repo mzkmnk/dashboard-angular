@@ -4,19 +4,19 @@
     <!-- メインコンテンツ -->
     <div class="flex h-full flex-row bg-gradient-to-r from-[rgba(241,242,255,1)] to-[rgba(255,247,252,1)]">
         <div class="h-full border-r" [@sidebarAnimation] = " isOpenTaskStatusSidebar() ? 'open':'close' ">
-            <div class="gap-2 px-5 pt-5">
+            <div class="gap-4 px-5 pt-5">
                 <div clss="flex flex-col gap-2">
                     <h4 class="pb-4">Task Ratio</h4>
-                    <p-meterGroup labelOrientation="vertical" [value]="statusMeterItems" [max]="tasksData.length"></p-meterGroup>
+                    <p-meterGroup labelOrientation="vertical" [value]="$statusMeterItems()" [max]="$tasks().length"></p-meterGroup>
                 </div>
                 <div clss="flex flex-col gap-2">
                     <h4 class="pb-4">Tags Ratio</h4>
-                    <p-meterGroup labelOrientation="vertical" [value]="tagsMeterItems" [max]="tagsMeterItems.length"></p-meterGroup>
+                    <p-meterGroup labelOrientation="vertical" [value]="$tagsMeterItems()" [max]="$tagsMeterItems().length"></p-meterGroup>
                 </div>
             </div>
         </div>
         <div class="h-full w-full px-14 pt-1">
-            <div class="flex w-full items-center justify-between pb-10">
+            <div class="flex w-full items-center justify-between pb-1">
                 <div class="flex flex-col">
                     <p-button icon="pi pi-align-left" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickIsOpenTaskStatusSidebar()"></p-button>
                     <h1 class="font-bold">Tasks</h1>
@@ -30,11 +30,45 @@
                     <div class="flex h-full flex-col">
                         <div class="flex items-center justify-between pb-5">
                             <h4 class="font-medium">{{ status }}</h4>
-                            <i class="pi pi-plus text-xl opacity-60 hover:opacity-100"></i>
+                            <p-button styleClass="text-xl" icon="pi pi-plus" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickShowAddTask(status)"></p-button>
                         </div>
-                        <div class="scrollbar h-[calc(100vh-170px)] overflow-auto">
-                            @for(task of tasksData;let j = $index; track j){
-                                @if(task.status === status){
+                        <div class="scrollbar h-[calc(100vh-180px)] overflow-auto rounded-b-2xl">
+                            @for(task of $tasks();let j = $index; track j){
+                                @if(task.status === status && includeEditingTask(task,$editingTasks())){
+                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4 shadow-lg shadow-slate-100">
+                                        <div class="flex flex-row gap-2">
+                                            @for(tag of task.tags;let k=$index; track k){
+                                                <p-tag [styleClass]="task.tagStyleClass" [rounded]="true" [value]="tag"></p-tag>
+                                            }
+                                        </div>
+                                        <p>{{task.title}}</p>
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <div class="flex flex-row items-center justify-center gap-2 text-slate-400">
+                                                    <i class="pi pi-flag"></i>
+                                                    <p class="text-sm">{{task.endDate | date:'MMM d'}}</p>
+                                                </div>
+                                            </div>
+                                            <p-avatarGroup>
+                                                @for(avatar of task.members;let k=$index; track k){
+                                                    <p-avatar [style]="avatar.style" [label]="avatar.label" [shape]="avatar.shape"></p-avatar>
+                                                }
+                                            </p-avatarGroup>
+                                        </div>
+                                        <div class="flex flex-row items-center justify-end gap-2 pb-2">
+                                            <p-button size="small" [outlined]="true" (onClick)="onClickCancelEditingTask(task.id)">
+                                                <div>
+                                                    <p>cancel</p>
+                                                </div>
+                                            </p-button>
+                                            <p-button size="small" [outlined]="true">
+                                                <div>
+                                                    <p>Save</p>
+                                                </div>
+                                            </p-button>
+                                        </div>
+                                    </div>
+                                }@else if(task.status === status){
                                     <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4 shadow-lg shadow-slate-100">
                                         <div class="flex flex-row gap-2">
                                             @for(tag of task.tags;let k=$index; track k){

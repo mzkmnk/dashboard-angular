@@ -1,9 +1,8 @@
 import { patchState, signalStore, signalStoreFeature, withHooks, withMethods, withState } from '@ngrx/signals';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
 
 import { DB } from '../../dexie/db';
 import { THomeInitialState } from '../types/home.type';
+import { withTaskMethods } from './task.feature';
 import { withUserMethods } from './user.feature';
 
 export const homeInitialState : THomeInitialState = {
@@ -17,7 +16,9 @@ export const homeInitialState : THomeInitialState = {
     size     : 'large',
     shape    : 'circle',
     style    : { 'background-color': '#ece9fc' }
-  }
+  },
+  editingTasks : {},
+  tasks        : []
 }
 
 const dexieDB = DB;
@@ -40,20 +41,11 @@ export const homeSignalStore = signalStore(
   withState<THomeInitialState>(homeInitialState),
   withCommonMethods(),
   withUserMethods(dexieDB),
-  withMethods((signalStore) => ({
-    loadTasks: rxMethod<undefined>(
-      pipe(
-        tap(() => patchState(signalStore,{common: {isLoading: true}})),
-        switchMap(async () => {
-          await dexieDB.getTasks();
-        }),
-        tap(() => patchState(signalStore,{common: {isLoading: false}})),
-      )
-    )
-  })),
+  withTaskMethods(dexieDB),
   withHooks({
     onInit: (signalStore) => {
       signalStore.getUser(undefined);
+      signalStore.getTasks(undefined);
     }
   })
 )

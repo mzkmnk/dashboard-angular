@@ -4,7 +4,9 @@ export type THomeInitialState = {
   common : {
     isLoading: boolean
   },
-  user: TUser,
+  user         : TUser,
+  editingTasks : TEditingTasks
+  tasks        : TTaskData[],
 }
 
 export type TUser = {
@@ -38,6 +40,8 @@ export type TTaskData = {
   startDate     : Date,
   endDate       : Date
 }
+
+export type TEditingTasks = Record<number,TTaskData>;
 
 export const mockDataAvatars: TUser[] = [
   {

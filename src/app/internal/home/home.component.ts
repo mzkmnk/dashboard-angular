@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
-import { Component, inject, Signal, signal,  WritableSignal } from '@angular/core';
+import { Component, computed, inject, Signal, signal,  WritableSignal } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
@@ -8,7 +8,7 @@ import { MeterGroupModule, MeterItem } from 'primeng/metergroup';
 import { TagModule } from 'primeng/tag';
 
 import { homeSignalStore } from '../stores/home.signal-store';
-import {  mockDataAvatars, tasksData, TCustomMeterItem, TTaskData, TTaskStatus, TUser } from '../types/home.type';
+import { tasksData, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
 
 @Component({
   selector   : 'app-home',
@@ -43,6 +43,10 @@ export class HomeComponent {
 
   $user: Signal<TUser> = this.homeSignalStore.user;
 
+  $tasks: Signal<TTaskData[]> = this.homeSignalStore.tasks;
+
+  $editingTasks: Signal<TEditingTasks> = this.homeSignalStore.editingTasks;
+
   isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(true);
 
 
@@ -57,19 +61,21 @@ export class HomeComponent {
     Done     : '#f3dff5'
   }
 
-  statusMeterItems: TCustomMeterItem[];
+  $statusMeterItems: Signal<TCustomMeterItem[]> = computed(() => this.getStatusRatio(this.$tasks()));
 
-  tagsMeterItems: MeterItem[];
+  $tagsMeterItems: Signal<MeterItem[]> = computed(() => this.getTagRatio(this.$tasks()));
 
-  constructor(){
-    this.homeSignalStore.loadTasks(undefined);
-    this.tasksData = this.tasksData.sort((a,b) => a.endDate.getTime() - b.endDate.getTime());
-    this.statusMeterItems = this.getStatusRatio(this.tasksData);
-    this.tagsMeterItems = this.getTagRatio(this.tasksData);
-  }
-
+  /**
+   * サイドバーの表示非表示を切り替える。
+   * @returns 
+   */
   onClickIsOpenTaskStatusSidebar = ():void => this.isOpenTaskStatusSidebar.update((value) => !value);
 
+  /**
+   * 全てのタスクのステータスの割合を取得する。
+   * @param tasksStatus 
+   * @returns 
+   */
   getStatusRatio = (tasksStatus: TTaskData[]):TCustomMeterItem[] => {
     const meterItems : TCustomMeterItem[] = [
       {label: 'Ready',value: tasksStatus.filter((task) => task.status === 'Ready').length,color: this.taskStatusColor.Ready},
@@ -80,6 +86,11 @@ export class HomeComponent {
     return meterItems;
   }
 
+  /**
+   * 全てのタグの割合を取得する。
+   * @param tasksStatus 
+   * @returns 
+   */
   getTagRatio = (tasksStatus: TTaskData[]):MeterItem[] => {
     const tags = new Set(tasksStatus.map((task) => task.tags).flat());
     const meterItems : MeterItem[] = [];
@@ -94,6 +105,10 @@ export class HomeComponent {
     return meterItems;
   }
 
+  /**
+   * 適当なカラーコードを生成する。
+   * @returns 
+   */
   getRandomColor = () : string => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -103,9 +118,34 @@ export class HomeComponent {
     return color;
   }
 
-  // ここからサンプルデータ
+  /**
+   * タスクが編集中かどうかを判定する。
+   * @param task 
+   * @param editingTasks 
+   * @returns 
+   */
+  includeEditingTask = (task:TTaskData,editingTasks:TEditingTasks):boolean => {
+    return Object.keys(editingTasks).includes(task.id.toString());
+  }
 
-  mockDataAvatars: TUser[] = mockDataAvatars;
+  onClickCancelEditingTask = (taskId:number):void => {
+    this.homeSignalStore.cancelEditingTask(taskId,this.$tasks(),this.$editingTasks());
+  }
 
-  tasksData: TTaskData[] = tasksData;
+  onClickShowAddTask = (taskStatus:TTaskStatus) :void => {
+    this.homeSignalStore.showAddTask({
+      status        : taskStatus,
+      id            : this.$tasks().length,
+      title         : '',
+      description   : '',
+      members       : [],
+      tags          : [],
+      tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
+      startDate     : new Date(),
+      endDate       : new Date(),
+    },
+    this.$tasks(),
+    this.$editingTasks()
+    );
+  }
 }
