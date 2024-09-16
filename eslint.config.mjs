@@ -1,9 +1,12 @@
 import eslint from '@eslint/js';
-import tsEslint from 'typescript-eslint';
-import angular from 'angular-eslint';
-import gitignore from 'eslint-config-flat-gitignore';
 import ngrx from '@ngrx/eslint-plugin/v9/index.js';
 import stylistic from '@stylistic/eslint-plugin';
+import angular from 'angular-eslint';
+import gitignore from 'eslint-config-flat-gitignore';
+import simpleImportSort from "eslint-plugin-simple-import-sort";
+import tailwind from "eslint-plugin-tailwindcss";
+import unusedImports from "eslint-plugin-unused-imports";
+import tsEslint from 'typescript-eslint';
 
 export default tsEslint.config(
   gitignore(),
@@ -19,8 +22,21 @@ export default tsEslint.config(
     extends: [
       eslint.configs.recommended,
       ...tsEslint.configs.strict,
-      ...tsEslint.configs.stylistic
+      ...tsEslint.configs.stylistic,
     ]
+  },
+
+  // tailwind config
+  {
+    files: ['**/*.component.html'],
+    plugins: {
+      'tailwindcss': tailwind
+    },
+    rules: {
+      'tailwindcss/classnames-order': 'error',
+      "tailwindcss/no-custom-classname": "warn",
+      "tailwindcss/no-contradicting-classname": "error"
+    }
   },
 
   // eslint stylistic
@@ -80,6 +96,21 @@ export default tsEslint.config(
     }
   },
 
+  {
+    plugins: {
+      "simple-import-sort": simpleImportSort,
+      "unused-imports": unusedImports,
+    },
+    rules: {
+      // eslint-plugin-simple-import-sort
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
+
+      // eslint-plugin-unused-imports
+      'unused-imports/no-unused-imports': 'error',
+    }
+  },
+
   // typescript-eslint config
   {
     files: ['**/*.ts'],
@@ -87,6 +118,18 @@ export default tsEslint.config(
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/prefer-for-of': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          "args": "all",
+          "argsIgnorePattern": "^_",
+          "caughtErrors": "all",
+          "caughtErrorsIgnorePattern": "^_",
+          "destructuredArrayIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "ignoreRestSiblings": true
+        }
+      ],
       '@typescript-eslint/naming-convention': [
         'error',
         {
