@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
-import { Component, inject, signal,  WritableSignal } from '@angular/core';
+import { Component, inject, Signal, signal,  WritableSignal } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
@@ -8,7 +8,7 @@ import { MeterGroupModule, MeterItem } from 'primeng/metergroup';
 import { TagModule } from 'primeng/tag';
 
 import { homeSignalStore } from '../stores/home.signal-store';
-import { mockDataAvatars,  tasksData, TCustomMeterItem, TTaskData, TTaskStatus, TUser } from '../types/home.type';
+import {  mockDataAvatars, tasksData, TCustomMeterItem, TTaskData, TTaskStatus, TUser } from '../types/home.type';
 
 @Component({
   selector   : 'app-home',
@@ -40,6 +40,8 @@ import { mockDataAvatars,  tasksData, TCustomMeterItem, TTaskData, TTaskStatus, 
 })
 export class HomeComponent {
   private readonly homeSignalStore = inject(homeSignalStore);
+
+  $user: Signal<TUser> = this.homeSignalStore.user;
 
   isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(true);
 

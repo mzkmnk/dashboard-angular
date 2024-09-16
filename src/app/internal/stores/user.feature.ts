@@ -23,7 +23,9 @@ export const withUserMethods = (dexieDB:AppDB) => {
                 header   : 'User Setting',
                 width    : '50vh',
               })
+              return;
             }
+            patchState(signalStore,{user: {...users[0]}})
           })
         )
       ),

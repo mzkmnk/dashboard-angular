@@ -41,11 +41,7 @@ export class AppDB extends Dexie {
    * 全てのタスクを取得する
    */
   getTasks = async () : Promise<void> => {
-    try {
-      console.log(await DB.tasks.toArray());
-    }catch(error){
-      console.log(error);
-    }
+    console.log(await DB.tasks.toArray());
   }
 
   /**
@@ -53,11 +49,7 @@ export class AppDB extends Dexie {
    * @param task タスクデータ
    */
   addTask = async (task:TTaskData) : Promise<void> => {
-    try {
-      await DB.tasks.add(task);
-    }catch(error){
-      console.log(error);
-    }
+    await DB.tasks.add(task);
   }
 }
 

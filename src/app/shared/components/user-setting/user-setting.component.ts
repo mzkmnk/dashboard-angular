@@ -26,7 +26,7 @@ export class UserSettingComponent {
     this.homeSignalStore.updateUser({updateUser: {
       id       : 0,
       username : this.$username(),
-      label    : this.$username()[0],
+      label    : this.$username()[0].toUpperCase(),
       size     : 'large',
       shape    : 'circle',
       style    : { 'background-color': '#ece9fc'}
