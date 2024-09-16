@@ -1,14 +1,17 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
-import { Component, computed, inject, Signal, signal,  WritableSignal } from '@angular/core';
+import { Component, computed, effect, inject, Signal, signal,  WritableSignal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MeterGroupModule, MeterItem } from 'primeng/metergroup';
 import { TagModule } from 'primeng/tag';
 
 import { homeSignalStore } from '../stores/home.signal-store';
-import { tasksData, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
+import { TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
 
 @Component({
   selector   : 'app-home',
@@ -19,7 +22,10 @@ import { tasksData, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUs
     AvatarGroupModule,
     TagModule,
     DatePipe,
-    MeterGroupModule
+    MeterGroupModule,
+    InputTextareaModule,
+    FloatLabelModule,
+    FormsModule
   ],
   animations: [
     trigger('sidebarAnimation',[

@@ -35,12 +35,12 @@ export const withTaskMethods = (dexieDB:AppDB) => {
 
       cancelEditingTask(taskId:number,tasks:TTaskData[],editingTasks:TEditingTasks):void {
         patchState(signalStore,{
-          editingTasks : {taskId,...editingTasks},
+          editingTasks : deleteObject(editingTasks,taskId),
           tasks        : tasks.filter((task) => task.id !== taskId),
         })
       },
 
-      addTask: rxMethod<{ task: TTaskData }>(pipe(
+      saveTask: rxMethod<{ task: TTaskData }>(pipe(
         tap(() => patchState(signalStore,{common: {isLoading: true}})),
         switchMap(async ({task}) => {
           console.log(task);
@@ -50,3 +50,8 @@ export const withTaskMethods = (dexieDB:AppDB) => {
     })),
   )
 }
+
+const deleteObject = (obj:Record<string|number,unknown>,key:string|number):Record<string|number,unknown> => {
+  const { [key]: _, ...rest } = obj;
+  return rest;
+};

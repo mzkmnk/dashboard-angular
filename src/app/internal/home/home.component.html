@@ -36,12 +36,14 @@
                             @for(task of $tasks();let j = $index; track j){
                                 @if(task.status === status && includeEditingTask(task,$editingTasks())){
                                     <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4 shadow-lg shadow-slate-100">
-                                        <div class="flex flex-row gap-2">
-                                            @for(tag of task.tags;let k=$index; track k){
-                                                <p-tag [styleClass]="task.tagStyleClass" [rounded]="true" [value]="tag"></p-tag>
-                                            }
-                                        </div>
-                                        <p>{{task.title}}</p>
+                                        <!-- <p>{{task.title}}</p> -->
+                                        <textarea
+                                            style="resize: none;"
+                                            pInputTextarea
+                                            placeholder="What is the Task?"
+                                            [(ngModel)]="$editingTasks()[task.id].description"
+                                        >
+                                        </textarea>
                                         <div class="flex items-center justify-between">
                                             <div>
                                                 <div class="flex flex-row items-center justify-center gap-2 text-slate-400">
