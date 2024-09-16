@@ -47,14 +47,14 @@ export class HomeComponent {
 
 
   taskStatus: TTaskStatus[] = [
-    'Ready','On Progress','Needs Review','Done' 
+    'Ready','Progress','Review','Done' 
   ];
 
   taskStatusColor: {[key in TTaskStatus]: string } = {
-    'Ready'        : '#de89ea',
-    'On Progress'  : '#46bd83',
-    'Needs Review' : '#07a0f7',
-    'Done'         : '#f3dff5'
+    Ready    : '#de89ea',
+    Progress : '#46bd83',
+    Review   : '#07a0f7',
+    Done     : '#f3dff5'
   }
 
   statusMeterItems: TCustomMeterItem[];
@@ -73,8 +73,8 @@ export class HomeComponent {
   getStatusRatio = (tasksStatus: TTaskData[]):TCustomMeterItem[] => {
     const meterItems : TCustomMeterItem[] = [
       {label: 'Ready',value: tasksStatus.filter((task) => task.status === 'Ready').length,color: this.taskStatusColor.Ready},
-      {label: 'On Progress',value: tasksStatus.filter((task) => task.status === 'On Progress').length,color: this.taskStatusColor['On Progress']},
-      {label: 'Needs Review',value: tasksStatus.filter((task) => task.status === 'Needs Review').length,color: this.taskStatusColor['Needs Review']},
+      {label: 'Progress',value: tasksStatus.filter((task) => task.status === 'Progress').length,color: this.taskStatusColor.Progress},
+      {label: 'Review',value: tasksStatus.filter((task) => task.status === 'Review').length,color: this.taskStatusColor.Review},
       {label: 'Done',value: tasksStatus.filter((task) => task.status === 'Done').length,color: this.taskStatusColor.Done}
     ];
     return meterItems;

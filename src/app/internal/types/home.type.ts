@@ -16,7 +16,7 @@ export type TUser = {
   style    : Record<string,string>
 }
   
-export type TTaskStatus = 'Ready' | 'On Progress' | 'Needs Review' | 'Done';
+export type TTaskStatus = 'Ready' | 'Progress' | 'Review' | 'Done';
   
 // eslint-disable-next-line @stylistic/max-len
 export type TTags = 'Frontend' | 'Backend' | 'Design' | 'Planning' | 'Management' | 'Testing' | 'Documentation' | 'Review' | 'Bugfix' | 'Optimization' | 'Research' | 'Refactoring' | 'UX' | 'Framework' | 'Security' | 'Database' | 'UI Design';
@@ -74,7 +74,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id          : 1,
-    status      : 'On Progress',
+    status      : 'Progress',
     title       : 'dashboardを作成する',
     description : 'Create a new design for the homepage',
     members     : mockDataAvatars,
@@ -87,7 +87,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id            : 2,
-    status        : 'On Progress',
+    status        : 'Progress',
     title         : 'タスクのendDateで日付をソートする関数を作成する',
     description   : 'Create a new design for the homepage',
     members       : mockDataAvatars,
@@ -98,7 +98,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id          : 3,
-    status      : 'Needs Review',
+    status      : 'Review',
     title       : 'APIのドキュメントを作成する',
     description : 'Create API documentation',
     members     : mockDataAvatars,
@@ -137,7 +137,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id          : 6,
-    status      : 'On Progress',
+    status      : 'Progress',
     title       : 'コードレビューを行う',
     description : 'Conduct code review',
     members     : mockDataAvatars,
@@ -150,7 +150,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id          : 7,
-    status      : 'Needs Review',
+    status      : 'Review',
     title       : 'バグを修正する',
     description : 'Fix bugs',
     members     : mockDataAvatars,
@@ -189,7 +189,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id          : 10,
-    status      : 'On Progress',
+    status      : 'Progress',
     title       : 'データベースを設計する',
     description : 'Design database',
     members     : mockDataAvatars,
@@ -202,7 +202,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id          : 11,
-    status      : 'Needs Review',
+    status      : 'Review',
     title       : 'セキュリティを強化する',
     description : 'Enhance security',
     members     : mockDataAvatars,
@@ -241,7 +241,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id          : 14,
-    status      : 'On Progress',
+    status      : 'Progress',
     title       : 'テストケースを作成する',
     description : 'Create test cases',
     members     : mockDataAvatars,
@@ -254,7 +254,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id          : 15,
-    status      : 'Needs Review',
+    status      : 'Review',
     title       : 'コードのリファクタリングを行う',
     description : 'Refactor code',
     members     : mockDataAvatars,
@@ -293,7 +293,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id          : 18,
-    status      : 'On Progress',
+    status      : 'Progress',
     title       : '新しいフレームワークを導入する',
     description : 'Implement new framework',
     members     : mockDataAvatars,
@@ -306,7 +306,7 @@ export const tasksData: TTaskData[] = [
   },
   {
     id          : 19,
-    status      : 'Needs Review',
+    status      : 'Review',
     title       : 'コードの最適化を行う',
     description : 'Optimize code',
     members     : mockDataAvatars,
