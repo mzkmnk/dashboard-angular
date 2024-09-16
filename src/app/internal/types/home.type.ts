@@ -1,54 +1,64 @@
 import { MeterItem } from 'primeng/metergroup';
 
-export type AvatarInterface = {
-  path  : string,
-  label : string,
-  size  : 'large' | 'normal' | 'xlarge' | undefined,
-  shape : 'square' | 'circle' | undefined,
-  style : Record<string,string>
+export type THomeInitialState = {
+  common : {
+    isLoading: boolean
+  },
+  user: TUser,
+}
+
+export type TUser = {
+  id       : number,
+  label    : string,
+  username : string,
+  size     : 'large' | 'normal' | 'xlarge' | undefined,
+  shape    : 'square' | 'circle' | undefined,
+  style    : Record<string,string>
 }
   
-export type TaskStatus = 'Ready' | 'On Progress' | 'Needs Review' | 'Done';
+export type TTaskStatus = 'Ready' | 'On Progress' | 'Needs Review' | 'Done';
   
 // eslint-disable-next-line @stylistic/max-len
-export type Tags = 'Frontend' | 'Backend' | 'Design' | 'Planning' | 'Management' | 'Testing' | 'Documentation' | 'Review' | 'Bugfix' | 'Optimization' | 'Research' | 'Refactoring' | 'UX' | 'Framework' | 'Security' | 'Database' | 'UI Design';
+export type TTags = 'Frontend' | 'Backend' | 'Design' | 'Planning' | 'Management' | 'Testing' | 'Documentation' | 'Review' | 'Bugfix' | 'Optimization' | 'Research' | 'Refactoring' | 'UX' | 'Framework' | 'Security' | 'Database' | 'UI Design';
   
-export type colorTheme = '#de89ea' | '#46bd83' | '#07a0f7';
+export type TColorTheme = '#de89ea' | '#46bd83' | '#07a0f7';
   
-export type CustomMeterItem = {
-  label: TaskStatus
+export type TCustomMeterItem = {
+  label: TTaskStatus
 } & MeterItem
   
-export type TaskData = {
+export type TTaskData = {
   id            : number,
-  status        : TaskStatus,
+  status        : TTaskStatus,
   title         : string,
   description   : string,
-  members       : AvatarInterface[],
+  members       : TUser[],
   tags          : string[],
   tagStyleClass : string,
   startDate     : Date,
   endDate       : Date
 }
 
-export const mockDataAvatars: AvatarInterface[] = [
+export const mockDataAvatars: TUser[] = [
   {
-    path  : 'assets/icons/icon1.jpg',
-    label : 'M',
-    size  : 'large',
-    style : { 'background-color': '#ece9fc' },
-    shape : 'circle'
+    id       : 0,
+    label    : 'M',
+    username : 'mockUser1',
+    size     : 'large',
+    style    : { 'background-color': '#ece9fc' },
+    shape    : 'circle'
   },
   {
-    path  : 'assets/icons/icon2.jpg',
-    label : 'S',
-    size  : 'large',
-    style : { 'background-color': '#dee9fc' },
-    shape : 'circle'
+    id       : 1,
+    label    : 'S',
+    username : 'mockUser2',
+    size     : 'large',
+    style    : { 'background-color': '#dee9fc' },
+    shape    : 'circle'
   }
 ]
 
-export const tasksData: TaskData[] = [
+export const tasksData: TTaskData[] = [
   {
     id          : 0,
     status      : 'Ready',

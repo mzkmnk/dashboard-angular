@@ -118,6 +118,28 @@ export default tsEslint.config(
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/prefer-for-of': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: ['parameter'],
+          format: ['camelCase'],
+          "leadingUnderscore": "allow"
+        },
+        {
+          selector: ['interface'],
+          format: ['PascalCase'],
+          prefix: ['I']
+        },
+        {
+          selector: ['typeLike'],
+          format: ['PascalCase'],
+          prefix:['T']
+        },
+        {
+          selector: ['class'],
+          format: ['PascalCase']
+        }
+      ],
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -130,18 +152,6 @@ export default tsEslint.config(
           "ignoreRestSiblings": true
         }
       ],
-      '@typescript-eslint/naming-convention': [
-        'error',
-        {
-          selector: ['parameter'],
-          format: ['camelCase']
-        },
-        {
-          selector: ['interface'],
-          format: ['PascalCase'],
-          prefix: ['I']
-        }
-      ]
     }
   },
 

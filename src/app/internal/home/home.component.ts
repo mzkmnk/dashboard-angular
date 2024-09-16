@@ -1,13 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
-import { Component, signal,  WritableSignal } from '@angular/core';
+import { Component, inject, signal,  WritableSignal } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
 import { MeterGroupModule, MeterItem } from 'primeng/metergroup';
 import { TagModule } from 'primeng/tag';
 
-import { AvatarInterface, CustomMeterItem, mockDataAvatars, TaskData, tasksData, TaskStatus } from '../types/home.type';
+import { homeSignalStore } from '../stores/home.signal-store';
+import { mockDataAvatars,  tasksData, TCustomMeterItem, TTaskData, TTaskStatus, TUser } from '../types/home.type';
 
 @Component({
   selector   : 'app-home',
@@ -38,26 +39,28 @@ import { AvatarInterface, CustomMeterItem, mockDataAvatars, TaskData, tasksData,
   styleUrl    : './home.component.scss'
 })
 export class HomeComponent {
+  private readonly homeSignalStore = inject(homeSignalStore);
 
   isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(true);
 
 
-  taskStatus: TaskStatus[] = [
+  taskStatus: TTaskStatus[] = [
     'Ready','On Progress','Needs Review','Done' 
   ];
 
-  taskStatusColor: {[key in TaskStatus]: string } = {
+  taskStatusColor: {[key in TTaskStatus]: string } = {
     'Ready'        : '#de89ea',
     'On Progress'  : '#46bd83',
     'Needs Review' : '#07a0f7',
     'Done'         : '#f3dff5'
   }
 
-  statusMeterItems: CustomMeterItem[];
+  statusMeterItems: TCustomMeterItem[];
 
   tagsMeterItems: MeterItem[];
 
   constructor(){
+    this.homeSignalStore.loadTasks(undefined);
     this.tasksData = this.tasksData.sort((a,b) => a.endDate.getTime() - b.endDate.getTime());
     this.statusMeterItems = this.getStatusRatio(this.tasksData);
     this.tagsMeterItems = this.getTagRatio(this.tasksData);
@@ -65,8 +68,8 @@ export class HomeComponent {
 
   onClickIsOpenTaskStatusSidebar = ():void => this.isOpenTaskStatusSidebar.update((value) => !value);
 
-  getStatusRatio = (tasksStatus: TaskData[]):CustomMeterItem[] => {
-    const meterItems : CustomMeterItem[] = [
+  getStatusRatio = (tasksStatus: TTaskData[]):TCustomMeterItem[] => {
+    const meterItems : TCustomMeterItem[] = [
       {label: 'Ready',value: tasksStatus.filter((task) => task.status === 'Ready').length,color: this.taskStatusColor.Ready},
       {label: 'On Progress',value: tasksStatus.filter((task) => task.status === 'On Progress').length,color: this.taskStatusColor['On Progress']},
       {label: 'Needs Review',value: tasksStatus.filter((task) => task.status === 'Needs Review').length,color: this.taskStatusColor['Needs Review']},
@@ -75,7 +78,7 @@ export class HomeComponent {
     return meterItems;
   }
 
-  getTagRatio = (tasksStatus: TaskData[]):MeterItem[] => {
+  getTagRatio = (tasksStatus: TTaskData[]):MeterItem[] => {
     const tags = new Set(tasksStatus.map((task) => task.tags).flat());
     const meterItems : MeterItem[] = [];
     tags.forEach((tag) => {
@@ -86,7 +89,6 @@ export class HomeComponent {
         color : this.getRandomColor()
       });
     });
-    console.log(meterItems);
     return meterItems;
   }
 
@@ -101,7 +103,7 @@ export class HomeComponent {
 
   // ここからサンプルデータ
 
-  mockDataAvatars: AvatarInterface[] = mockDataAvatars;
+  mockDataAvatars: TUser[] = mockDataAvatars;
 
-  tasksData: TaskData[] = tasksData;
+  tasksData: TTaskData[] = tasksData;
 }
