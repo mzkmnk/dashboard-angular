@@ -19,6 +19,9 @@ export type AvatarInterface = {
 
 export type TaskStatus = 'Ready' | 'On Progress' | 'Needs Review' | 'Done';
 
+// eslint-disable-next-line @stylistic/max-len
+export type Tags = 'Frontend' | 'Backend' | 'Design' | 'Planning' | 'Management' | 'Testing' | 'Documentation' | 'Review' | 'Bugfix' | 'Optimization' | 'Research' | 'Refactoring' | 'UX' | 'Framework' | 'Security' | 'Database' | 'UI Design';
+
 export type colorTheme = '#de89ea' | '#46bd83' | '#07a0f7';
 
 export type CustomMeterItem = {
@@ -26,6 +29,7 @@ export type CustomMeterItem = {
 } & MeterItem
 
 export type TaskData = {
+  id            : number,
   status        : TaskStatus,
   title         : string,
   description   : string,
@@ -55,9 +59,10 @@ export type TaskData = {
       })),
       state('close',style({
         width   : '0%',
-        opacity : 0
+        opacity : 0,
+        display : 'none',
       })),
-      transition('open <=> close',[ animate('0.25s ease-in-out') ])
+      transition('open <=> close',[ animate('250ms ease-out') ])
     ])
   ],
   templateUrl : './home.component.html',
@@ -67,22 +72,26 @@ export class HomeComponent {
 
   isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(true);
 
+
   taskStatus: TaskStatus[] = [
     'Ready','On Progress','Needs Review','Done' 
   ];
 
   taskStatusColor: {[key in TaskStatus]: string } = {
-    'Ready'       : '#de89ea',
-    'On Progress' : '#46bd83',
-    'Needs Review': '#07a0f7',
-    'Done'        : '#f3dff5'
+    'Ready'        : '#de89ea',
+    'On Progress'  : '#46bd83',
+    'Needs Review' : '#07a0f7',
+    'Done'         : '#f3dff5'
   }
 
-  meterItems: CustomMeterItem[];
+  statusMeterItems: CustomMeterItem[];
+
+  tagsMeterItems: MeterItem[];
 
   constructor(){
     this.tasksData = this.tasksData.sort((a,b) => a.endDate.getTime() - b.endDate.getTime());
-    this.meterItems = this.getStatusRatio(this.tasksData);
+    this.statusMeterItems = this.getStatusRatio(this.tasksData);
+    this.tagsMeterItems = this.getTagRatio(this.tasksData);
   }
 
   onClickIsOpenTaskStatusSidebar = ():void => this.isOpenTaskStatusSidebar.update((value) => !value);
@@ -95,6 +104,30 @@ export class HomeComponent {
       {label: 'Done',value: tasksStatus.filter((task) => task.status === 'Done').length,color: this.taskStatusColor.Done}
     ];
     return meterItems;
+  }
+
+  getTagRatio = (tasksStatus: TaskData[]):MeterItem[] => {
+    const tags = new Set(tasksStatus.map((task) => task.tags).flat());
+    const meterItems : MeterItem[] = [];
+    tags.forEach((tag) => {
+      const tagCount = tasksStatus.filter((task) => task.tags.includes(tag)).length;
+      meterItems.push({
+        label : tag,
+        value : tagCount,
+        color : this.getRandomColor()
+      });
+    });
+    console.log(meterItems);
+    return meterItems;
+  }
+
+  getRandomColor = () : string => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 
   // ここからサンプルデータ
@@ -118,6 +151,7 @@ export class HomeComponent {
 
   tasksData: TaskData[] = [
     {
+      id          : 0,
       status      : 'Ready',
       title       : 'デザインを作成する',
       description : 'Create a new design for the homepage',
@@ -130,6 +164,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 7))
     },
     {
+      id          : 1,
       status      : 'On Progress',
       title       : 'dashboardを作成する',
       description : 'Create a new design for the homepage',
@@ -142,6 +177,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 7))
     },
     {
+      id            : 2,
       status        : 'On Progress',
       title         : 'タスクのendDateで日付をソートする関数を作成する',
       description   : 'Create a new design for the homepage',
@@ -152,6 +188,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 2))
     },
     {
+      id          : 3,
       status      : 'Needs Review',
       title       : 'APIのドキュメントを作成する',
       description : 'Create API documentation',
@@ -164,6 +201,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 5))
     },
     {
+      id          : 4,
       status      : 'Done',
       title       : 'ユニットテストを実装する',
       description : 'Implement unit tests',
@@ -171,11 +209,12 @@ export class HomeComponent {
       tags        : [
         'Testing', 'Backend' 
       ],
-      tagStyleClass : 'font-medium p-2 bg-yellow-secondary text-yellow-primary',
+      tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
       startDate     : new Date(),
       endDate       : new Date(new Date().setDate(new Date().getDate() + 3))
     },
     {
+      id          : 5,
       status      : 'Ready',
       title       : '新しい機能を設計する',
       description : 'Design new feature',
@@ -188,6 +227,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 10))
     },
     {
+      id          : 6,
       status      : 'On Progress',
       title       : 'コードレビューを行う',
       description : 'Conduct code review',
@@ -200,6 +240,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 4))
     },
     {
+      id          : 7,
       status      : 'Needs Review',
       title       : 'バグを修正する',
       description : 'Fix bugs',
@@ -212,6 +253,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 6))
     },
     {
+      id          : 8,
       status      : 'Done',
       title       : 'パフォーマンスを最適化する',
       description : 'Optimize performance',
@@ -219,11 +261,12 @@ export class HomeComponent {
       tags        : [
         'Optimization', 'Backend' 
       ],
-      tagStyleClass : 'font-medium p-2 bg-yellow-secondary text-yellow-primary',
+      tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
       startDate     : new Date(),
       endDate       : new Date(new Date().setDate(new Date().getDate() + 8))
     },
     {
+      id          : 9,
       status      : 'Ready',
       title       : 'ユーザーインターフェースを改善する',
       description : 'Improve user interface',
@@ -236,6 +279,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 9))
     },
     {
+      id          : 10,
       status      : 'On Progress',
       title       : 'データベースを設計する',
       description : 'Design database',
@@ -248,6 +292,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 12))
     },
     {
+      id          : 11,
       status      : 'Needs Review',
       title       : 'セキュリティを強化する',
       description : 'Enhance security',
@@ -260,6 +305,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 11))
     },
     {
+      id          : 12,
       status      : 'Done',
       title       : 'プロジェクトのドキュメントを更新する',
       description : 'Update project documentation',
@@ -267,11 +313,12 @@ export class HomeComponent {
       tags        : [
         'Documentation', 'Planning' 
       ],
-      tagStyleClass : 'font-medium p-2 bg-yellow-secondary text-yellow-primary',
+      tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
       startDate     : new Date(),
       endDate       : new Date(new Date().setDate(new Date().getDate() + 7))
     },
     {
+      id          : 13,
       status      : 'Ready',
       title       : '新しいライブラリを調査する',
       description : 'Research new libraries',
@@ -284,6 +331,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 5))
     },
     {
+      id          : 14,
       status      : 'On Progress',
       title       : 'テストケースを作成する',
       description : 'Create test cases',
@@ -296,6 +344,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 6))
     },
     {
+      id          : 15,
       status      : 'Needs Review',
       title       : 'コードのリファクタリングを行う',
       description : 'Refactor code',
@@ -308,6 +357,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 4))
     },
     {
+      id          : 16,
       status      : 'Done',
       title       : 'ユーザーテストを実施する',
       description : 'Conduct user testing',
@@ -315,11 +365,12 @@ export class HomeComponent {
       tags        : [
         'Testing', 'UX' 
       ],
-      tagStyleClass : 'font-medium p-2 bg-yellow-secondary text-yellow-primary',
+      tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
       startDate     : new Date(),
       endDate       : new Date(new Date().setDate(new Date().getDate() + 3))
     },
     {
+      id          : 17,
       status      : 'Ready',
       title       : 'プロジェクトのロードマップを作成する',
       description : 'Create project roadmap',
@@ -332,6 +383,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 8))
     },
     {
+      id          : 18,
       status      : 'On Progress',
       title       : '新しいフレームワークを導入する',
       description : 'Implement new framework',
@@ -344,6 +396,7 @@ export class HomeComponent {
       endDate       : new Date(new Date().setDate(new Date().getDate() + 10))
     },
     {
+      id          : 19,
       status      : 'Needs Review',
       title       : 'コードの最適化を行う',
       description : 'Optimize code',

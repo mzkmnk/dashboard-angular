@@ -6,12 +6,24 @@ export default {
   theme   : {
     extend: {
       colors: {
-        'pink-primary'    : '#de89ea',
-        'pink-secondary'  : '#f3dff5',
-        'green-primary'   : '#46bd83',
-        'green-secondary' : '#d5ede2',
-        'blue-primary'    : '#07a0f7',
-        'blue-secondary'  : '#ceecfd',
+        'pink-primary'     : '#de89ea',
+        'pink-secondary'   : '#f3dff5',
+        'green-primary'    : '#46bd83',
+        'green-secondary'  : '#d5ede2',
+        'blue-primary'     : '#07a0f7',
+        'blue-secondary'   : '#ceecfd',
+        'red-primary'      : '#f44336',
+        'red-secondary'    : '#ffcdd2',
+        'yellow-primary'   : '#ffeb3b',
+        'yellow-secondary' : '#fff9c4',
+        'purple-primary'   : '#9c27b0',
+        'purple-secondary' : '#e1bee7',
+        'orange-primary'   : '#ff9800',
+        'orange-secondary' : '#ffe0b2',
+        'teal-primary'     : '#009688',
+        'teal-secondary'   : '#b2dfdb',
+        'gray-primary'     : '#9e9e9e',
+        'gray-secondary'   : '#e0e0e0'
       }
     },
   },

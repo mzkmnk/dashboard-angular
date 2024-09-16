@@ -3,18 +3,24 @@
     <!-- <div class="h-16 px-3"></div> -->
     <!-- メインコンテンツ -->
     <div class="flex h-full flex-row bg-gradient-to-r from-[rgba(241,242,255,1)] to-[rgba(255,247,252,1)]">
-        <div class="h-full w-1/4 border-r" [@sidebarAnimation] = " isOpenTaskStatusSidebar() ? 'open':'close' ">
-            <p-button icon="pi pi-align-left" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickIsOpenTaskStatusSidebar()"></p-button>
-            <div class="px-5">
-                <p-meterGroup styleClass="pt-4" [value]="meterItems" labelOrientation="vertical" [max]="tasksData.length"></p-meterGroup>
+        <div class="h-full border-r" [@sidebarAnimation] = " isOpenTaskStatusSidebar() ? 'open':'close' ">
+            <div class="gap-2 px-5 pt-5">
+                <div clss="flex flex-col gap-2">
+                    <h4 class="pb-4">Task Ratio</h4>
+                    <p-meterGroup labelOrientation="vertical" [value]="statusMeterItems" [max]="tasksData.length"></p-meterGroup>
+                </div>
+                <div clss="flex flex-col gap-2">
+                    <h4 class="pb-4">Tags Ratio</h4>
+                    <p-meterGroup labelOrientation="vertical" [value]="tagsMeterItems" [max]="tagsMeterItems.length"></p-meterGroup>
+                </div>
             </div>
         </div>
-        @if(!isOpenTaskStatusSidebar()){
-            <p-button icon="pi pi-align-left" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickIsOpenTaskStatusSidebar()"></p-button>
-        }
         <div class="h-full w-full px-14 pt-1">
             <div class="flex w-full items-center justify-between pb-10">
-                <h1 class="font-bold">Tasks</h1>
+                <div class="flex flex-col">
+                    <p-button icon="pi pi-align-left" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickIsOpenTaskStatusSidebar()"></p-button>
+                    <h1 class="font-bold">Tasks</h1>
+                </div>
                 <div class="flex gap-2">
                     @for(avatar of mockDataAvatars;let index = $index; track index){
                         <p-avatar [style]="avatar.style" [label]="avatar.label" [size]="avatar.size" [shape]="avatar.shape"></p-avatar>
@@ -26,12 +32,12 @@
                     <div class="flex h-full flex-col">
                         <div class="flex items-center justify-between pb-5">
                             <h4 class="font-medium">{{ status }}</h4>
-                            <i class="pi pi-ellipsis-h text-xl opacity-60 hover:opacity-100"></i>
+                            <i class="pi pi-plus text-xl opacity-60 hover:opacity-100"></i>
                         </div>
-                        <div class="scrollbar h-[calc(100vh-150px)] overflow-auto">
+                        <div class="scrollbar h-[calc(100vh-170px)] overflow-auto">
                             @for(task of tasksData;let j = $index; track j){
                                 @if(task.status === status){
-                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-lg shadow-slate-100">
+                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4 shadow-lg shadow-slate-100">
                                         <div class="flex flex-row gap-2">
                                             @for(tag of task.tags;let k=$index; track k){
                                                 <p-tag [styleClass]="task.tagStyleClass" [rounded]="true" [value]="tag"></p-tag>
@@ -50,6 +56,14 @@
                                                     <p-avatar [style]="avatar.style" [label]="avatar.label" [shape]="avatar.shape"></p-avatar>
                                                 }
                                             </p-avatarGroup>
+                                        </div>
+                                        <div class="flex flex-row items-center justify-end">
+                                            @if(status !== 'Ready'){
+                                                <p-button icon="pi pi-angle-left" severity="secondary" [rounded]="true" [text]="true"></p-button>
+                                            }
+                                            @if(status !== 'Done'){
+                                                <p-button icon="pi pi-angle-right" severity="secondary" [rounded]="true" [text]="true"></p-button>
+                                            }
                                         </div>
                                     </div>
                                 }
