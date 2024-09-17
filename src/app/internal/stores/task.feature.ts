@@ -40,11 +40,13 @@ export const withTaskMethods = (dexieDB:AppDB) => {
       saveTask: rxMethod<{ taskId: number,tasks: TTaskData[],editingTasks: TEditingTasks }>(
         pipe(
           switchMap(async ({taskId,tasks,editingTasks}) => {
-            console.log('ok');
             patchState(signalStore,{
               editingTasks : deleteObject(editingTasks,taskId),
               tasks        : [
-                editingTasks[taskId],...tasks 
+                {
+                  ...editingTasks[taskId],
+                },
+                ...tasks 
               ]
             })
           }),

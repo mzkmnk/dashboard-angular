@@ -36,7 +36,6 @@
                             @for(editTask of $editingTasks()|keyvalue;let j=$index; track j){
                                 @if(editTask.value.status === status){
                                     <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4 shadow-lg shadow-slate-100">
-                                        <!-- <p>{{task.title}}</p> -->
                                         <textarea
                                             style="resize: none;"
                                             pInputTextarea
@@ -44,7 +43,19 @@
                                             [(ngModel)]="editTask.value.description"
                                         >
                                         </textarea>
-                                        <div class="flex flex-row items-center justify-between gap-2 pt-4">
+                                        <div class="flex w-full flex-row items-center gap-2">
+                                            <i class="pi pi-tag text-slate-400"></i>
+                                            <p-multiSelect 
+                                                class="w-full"
+                                                styleClass="w-full"
+                                                optionLabel="name" 
+                                                placeholder="Select Tags"
+                                                [options]="tags"
+                                                [(ngModel)]="editTask.value.tags"
+                                            />
+                                        </div>
+                                        <p-divider />
+                                        <div class="flex flex-row items-center justify-between gap-2">
                                             <div class="flex w-full flex-row items-center justify-center gap-2 text-slate-400">
                                                 <p-floatLabel class="w-full">
                                                     <p-calendar class="w-full" styleClass="w-full" appendTo="body"   [(ngModel)]="editTask.value.startDate" />

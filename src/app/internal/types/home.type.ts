@@ -43,6 +43,25 @@ export type TTaskData = {
 
 export type TEditingTasks = Record<number,TTaskData>;
 
+export const tags = [
+  {
+    name : 'Frontend',
+    code : 'Frontend'
+  },
+  {
+    name : 'Backend',
+    code : 'Backend'
+  },
+  {
+    name : 'UI',
+    code : 'UI'
+  },
+  {
+    name : 'UX',
+    code : 'UX'
+  }
+];
+
 export const mockDataAvatars: TUser[] = [
   {
     id       : 0,

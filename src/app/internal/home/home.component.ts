@@ -6,13 +6,15 @@ import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
+import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MeterGroupModule, MeterItem } from 'primeng/metergroup';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { TagModule } from 'primeng/tag';
 
 import { homeSignalStore } from '../stores/home.signal-store';
-import { TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
+import { tags, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
 
 @Component({
   selector   : 'app-home',
@@ -29,6 +31,8 @@ import { TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '
     FormsModule,
     CalendarModule,
     KeyValuePipe,
+    DividerModule,
+    MultiSelectModule,
   ],
   animations: [
     trigger('sidebarAnimation',[
@@ -58,6 +62,7 @@ export class HomeComponent {
 
   $isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(false);
 
+  tags = tags;
 
   taskStatus: TTaskStatus[] = [
     'Ready','Progress','Review','Done' 
