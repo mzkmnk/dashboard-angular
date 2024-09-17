@@ -33,55 +33,58 @@
                             <p-button styleClass="text-xl" icon="pi pi-plus" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickShowAddTask(status)"></p-button>
                         </div>
                         <div class="scrollbar h-[calc(100vh-180px)] overflow-auto rounded-b-2xl">
-                            @for(task of $tasks();let j = $index; track j){
-                                @if(task.status === status && includeEditingTask(task,$editingTasks())){
+                            @for(editTask of $editingTasks()|keyvalue;let j=$index; track j){
+                                @if(editTask.value.status === status){
                                     <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4 shadow-lg shadow-slate-100">
                                         <!-- <p>{{task.title}}</p> -->
                                         <textarea
                                             style="resize: none;"
                                             pInputTextarea
                                             placeholder="What is the Task?"
-                                            [(ngModel)]="$editingTasks()[task.id].description"
+                                            [(ngModel)]="editTask.value.description"
                                         >
                                         </textarea>
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <div class="w-full flex flex-row items-center justify-center gap-2 text-slate-400">
-                                                    <i class="pi pi-flag"></i>
-                                                    <!-- <p class="text-sm">{{task.endDate | date:'MMM d'}}</p> -->
-                                                    <!-- <p-calendar class="w-full" [(ngModel)]="$editingTasks()[task.id].endDate" /> -->
-                                                </div>
+                                        <div class="flex flex-row items-center justify-between gap-2 pt-4">
+                                            <div class="flex w-full flex-row items-center justify-center gap-2 text-slate-400">
+                                                <p-floatLabel class="w-full">
+                                                    <p-calendar class="w-full" styleClass="w-full" appendTo="body"   [(ngModel)]="editTask.value.startDate" />
+                                                    <label for="endDate">Start Date</label>
+                                                </p-floatLabel>   
                                             </div>
-                                            <p-avatarGroup>
-                                                @for(avatar of task.members;let k=$index; track k){
-                                                    <p-avatar [style]="avatar.style" [label]="avatar.label" [shape]="avatar.shape"></p-avatar>
-                                                }
-                                            </p-avatarGroup>
+                                            <div class="flex w-full flex-row items-center justify-center gap-2 text-slate-400">
+                                                <p-floatLabel class="w-full">
+                                                    <p-calendar class="w-full" styleClass="w-full" appendTo="body"   [(ngModel)]="editTask.value.endDate" />
+                                                    <label for="endDate">End Date</label>
+                                                </p-floatLabel>    
+                                            </div>
                                         </div>
                                         <div class="flex flex-row items-center justify-end gap-2 pb-2">
-                                            <p-button size="small" [outlined]="true" (onClick)="onClickCancelEditingTask(task.id)">
+                                            <p-button size="small" [outlined]="true" (onClick)="onClickCancelEditingTask(editTask.value.id)">
                                                 <div>
                                                     <p>cancel</p>
                                                 </div>
                                             </p-button>
-                                            <p-button size="small" [outlined]="true">
+                                            <p-button size="small" [disabled]="editTask.value.description.length === 0" [outlined]="true" (onClick)="onClickSaveTask(editTask.value.id)">
                                                 <div>
                                                     <p>Save</p>
                                                 </div>
                                             </p-button>
                                         </div>
                                     </div>
-                                }@else if(task.status === status){
+                                }
+                            }
+                            @for(task of $tasks();let j = $index; track j){
+                                @if(task.status === status){
                                     <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4 shadow-lg shadow-slate-100">
                                         <div class="flex flex-row gap-2">
                                             @for(tag of task.tags;let k=$index; track k){
                                                 <p-tag [styleClass]="task.tagStyleClass" [rounded]="true" [value]="tag"></p-tag>
                                             }
                                         </div>
-                                        <p class="text-sm">{{task.title}}</p>
+                                        <p class="text-sm">{{task.description}}</p>
                                         <div class="flex items-center justify-between">
                                             <div>
-                                                <div class="flex flex-row items-center justify-center gap-2 text-slate-400 text-xs">
+                                                <div class="flex flex-row items-center justify-center gap-2 text-xs text-slate-400">
                                                     <i class="pi pi-flag"></i>
                                                     <p>{{task.endDate | date:'MMM d'}}</p>
                                                 </div>

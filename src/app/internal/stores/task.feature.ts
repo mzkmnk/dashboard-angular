@@ -22,31 +22,33 @@ export const withTaskMethods = (dexieDB:AppDB) => {
         )
       ),
 
-      showAddTask(task:TTaskData,tasks:TTaskData[],editingTasks:TEditingTasks):void {
+      showAddTask(task:TTaskData,editingTasks:TEditingTasks):void {
         patchState(signalStore,{
           editingTasks: {
             [task.id]: task,
             ...editingTasks
-          },
-          tasks: [
-            task,...tasks,
-          ]});
+          }
+        });
       },
 
-      cancelEditingTask(taskId:number,tasks:TTaskData[],editingTasks:TEditingTasks):void {
+      cancelEditingTask(taskId:number,editingTasks:TEditingTasks):void {
         patchState(signalStore,{
-          editingTasks : deleteObject(editingTasks,taskId),
-          tasks        : tasks.filter((task) => task.id !== taskId),
+          editingTasks: deleteObject(editingTasks,taskId),
         })
       },
 
-      saveTask: rxMethod<{ task: TTaskData }>(pipe(
-        tap(() => patchState(signalStore,{common: {isLoading: true}})),
-        switchMap(async ({task}) => {
-          console.log(task);
-        }),
-        tap(() => patchState(signalStore,{common: {isLoading: false}})),
-      )),
+      saveTask: rxMethod<{ taskId: number,tasks: TTaskData[],editingTasks: TEditingTasks }>(
+        pipe(
+          switchMap(async ({taskId,tasks,editingTasks}) => {
+            console.log('ok');
+            patchState(signalStore,{
+              editingTasks : deleteObject(editingTasks,taskId),
+              tasks        : [
+                editingTasks[taskId],...tasks 
+              ]
+            })
+          }),
+        )),
     })),
   )
 }

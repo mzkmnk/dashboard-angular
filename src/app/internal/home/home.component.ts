@@ -1,15 +1,15 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { DatePipe } from '@angular/common';
-import { Component, computed, effect, inject, Signal, signal,  WritableSignal } from '@angular/core';
+import { DatePipe, KeyValuePipe } from '@angular/common';
+import { Component, computed, inject, Signal, signal,  WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MeterGroupModule, MeterItem } from 'primeng/metergroup';
 import { TagModule } from 'primeng/tag';
-import { CalendarModule } from 'primeng/calendar';
 
 import { homeSignalStore } from '../stores/home.signal-store';
 import { TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
@@ -26,7 +26,9 @@ import { TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '
     MeterGroupModule,
     InputTextareaModule,
     FloatLabelModule,
-    FormsModule
+    FormsModule,
+    CalendarModule,
+    KeyValuePipe,
   ],
   animations: [
     trigger('sidebarAnimation',[
@@ -71,6 +73,8 @@ export class HomeComponent {
   $statusMeterItems: Signal<TCustomMeterItem[]> = computed(() => this.getStatusRatio(this.$tasks()));
 
   $tagsMeterItems: Signal<MeterItem[]> = computed(() => this.getTagRatio(this.$tasks()));
+
+  tmpValue: Date = new Date();
 
   /**
    * サイドバーの表示非表示を切り替える。
@@ -136,7 +140,7 @@ export class HomeComponent {
   }
 
   onClickCancelEditingTask = (taskId:number):void => {
-    this.homeSignalStore.cancelEditingTask(taskId,this.$tasks(),this.$editingTasks());
+    this.homeSignalStore.cancelEditingTask(taskId,this.$editingTasks());
   }
 
   onClickShowAddTask = (taskStatus:TTaskStatus) :void => {
@@ -145,14 +149,17 @@ export class HomeComponent {
       id            : this.$tasks().length,
       title         : '',
       description   : '',
-      members       : [],
+      members       : [ this.$user() ],
       tags          : [],
       tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
       startDate     : new Date(),
-      endDate       : new Date(),
+      endDate       : new Date(new Date().setDate(new Date().getDate() + 7)),
     },
-    this.$tasks(),
     this.$editingTasks()
     );
+  }
+
+  onClickSaveTask = (taskId:number):void => {
+    this.homeSignalStore.saveTask({taskId,tasks: this.$tasks(),editingTasks: this.$editingTasks()});
   }
 }

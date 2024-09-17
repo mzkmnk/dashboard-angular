@@ -67,7 +67,7 @@ export const tasksData: TTaskData[] = [
     id          : 0,
     status      : 'Ready',
     title       : 'デザインを作成する',
-    description : 'Create a new design for the homepage',
+    description : 'デザインを作成する',
     members     : mockDataAvatars,
     tags        : [
       'UI Design', 'UX Design' 
@@ -80,7 +80,7 @@ export const tasksData: TTaskData[] = [
     id          : 1,
     status      : 'Progress',
     title       : 'dashboardを作成する',
-    description : 'Create a new design for the homepage',
+    description : 'dashboardを作成する',
     members     : mockDataAvatars,
     tags        : [
       'Programming', 'Frontend' 
@@ -93,7 +93,7 @@ export const tasksData: TTaskData[] = [
     id            : 2,
     status        : 'Progress',
     title         : 'タスクのendDateで日付をソートする関数を作成する',
-    description   : 'Create a new design for the homepage',
+    description   : 'タスクのendDateで日付をソートする関数を作成する',
     members       : mockDataAvatars,
     tags          : [ 'Frontend' ],
     tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
@@ -104,7 +104,7 @@ export const tasksData: TTaskData[] = [
     id          : 3,
     status      : 'Review',
     title       : 'APIのドキュメントを作成する',
-    description : 'Create API documentation',
+    description : 'APIのドキュメントを作成する',
     members     : mockDataAvatars,
     tags        : [
       'Documentation', 'Backend' 
@@ -117,7 +117,7 @@ export const tasksData: TTaskData[] = [
     id          : 4,
     status      : 'Done',
     title       : 'ユニットテストを実装する',
-    description : 'Implement unit tests',
+    description : 'ユニットテストを実装する',
     members     : mockDataAvatars,
     tags        : [
       'Testing', 'Backend' 
@@ -130,7 +130,7 @@ export const tasksData: TTaskData[] = [
     id          : 5,
     status      : 'Ready',
     title       : '新しい機能を設計する',
-    description : 'Design new feature',
+    description : '新しい機能を設計する',
     members     : mockDataAvatars,
     tags        : [
       'Design', 'Planning' 
@@ -143,7 +143,7 @@ export const tasksData: TTaskData[] = [
     id          : 6,
     status      : 'Progress',
     title       : 'コードレビューを行う',
-    description : 'Conduct code review',
+    description : 'コードレビューを行う',
     members     : mockDataAvatars,
     tags        : [
       'Review', 'Backend' 
@@ -156,7 +156,7 @@ export const tasksData: TTaskData[] = [
     id          : 7,
     status      : 'Review',
     title       : 'バグを修正する',
-    description : 'Fix bugs',
+    description : 'バグを修正する',
     members     : mockDataAvatars,
     tags        : [
       'Bugfix', 'Frontend' 
@@ -169,7 +169,7 @@ export const tasksData: TTaskData[] = [
     id          : 8,
     status      : 'Done',
     title       : 'パフォーマンスを最適化する',
-    description : 'Optimize performance',
+    description : 'パフォーマンスを最適化する',
     members     : mockDataAvatars,
     tags        : [
       'Optimization', 'Backend' 
@@ -182,7 +182,7 @@ export const tasksData: TTaskData[] = [
     id          : 9,
     status      : 'Ready',
     title       : 'ユーザーインターフェースを改善する',
-    description : 'Improve user interface',
+    description : 'ユーザーインターフェースを改善する',
     members     : mockDataAvatars,
     tags        : [
       'UI Design', 'Frontend' 
@@ -195,7 +195,7 @@ export const tasksData: TTaskData[] = [
     id          : 10,
     status      : 'Progress',
     title       : 'データベースを設計する',
-    description : 'Design database',
+    description : 'データベースを設計する',
     members     : mockDataAvatars,
     tags        : [
       'Database', 'Backend' 
@@ -208,7 +208,7 @@ export const tasksData: TTaskData[] = [
     id          : 11,
     status      : 'Review',
     title       : 'セキュリティを強化する',
-    description : 'Enhance security',
+    description : 'セキュリティを強化する',
     members     : mockDataAvatars,
     tags        : [
       'Security', 'Backend' 
@@ -221,7 +221,7 @@ export const tasksData: TTaskData[] = [
     id          : 12,
     status      : 'Done',
     title       : 'プロジェクトのドキュメントを更新する',
-    description : 'Update project documentation',
+    description : 'プロジェクトのドキュメントを更新する',
     members     : mockDataAvatars,
     tags        : [
       'Documentation', 'Planning' 
@@ -234,7 +234,7 @@ export const tasksData: TTaskData[] = [
     id          : 13,
     status      : 'Ready',
     title       : '新しいライブラリを調査する',
-    description : 'Research new libraries',
+    description : '新しいライブラリを調査する',
     members     : mockDataAvatars,
     tags        : [
       'Research', 'Planning' 
@@ -247,7 +247,7 @@ export const tasksData: TTaskData[] = [
     id          : 14,
     status      : 'Progress',
     title       : 'テストケースを作成する',
-    description : 'Create test cases',
+    description : 'テストケースを作成する',
     members     : mockDataAvatars,
     tags        : [
       'Testing', 'Frontend' 
@@ -260,7 +260,7 @@ export const tasksData: TTaskData[] = [
     id          : 15,
     status      : 'Review',
     title       : 'コードのリファクタリングを行う',
-    description : 'Refactor code',
+    description : 'コードのリファクタリングを行う',
     members     : mockDataAvatars,
     tags        : [
       'Refactoring', 'Backend' 
@@ -273,7 +273,7 @@ export const tasksData: TTaskData[] = [
     id          : 16,
     status      : 'Done',
     title       : 'ユーザーテストを実施する',
-    description : 'Conduct user testing',
+    description : 'ユーザーテストを実施する',
     members     : mockDataAvatars,
     tags        : [
       'Testing', 'UX' 
@@ -286,7 +286,7 @@ export const tasksData: TTaskData[] = [
     id          : 17,
     status      : 'Ready',
     title       : 'プロジェクトのロードマップを作成する',
-    description : 'Create project roadmap',
+    description : 'プロジェクトのロードマップを作成する',
     members     : mockDataAvatars,
     tags        : [
       'Planning', 'Management' 
@@ -299,7 +299,7 @@ export const tasksData: TTaskData[] = [
     id          : 18,
     status      : 'Progress',
     title       : '新しいフレームワークを導入する',
-    description : 'Implement new framework',
+    description : '新しいフレームワークを導入する',
     members     : mockDataAvatars,
     tags        : [
       'Framework', 'Frontend' 
@@ -312,7 +312,7 @@ export const tasksData: TTaskData[] = [
     id          : 19,
     status      : 'Review',
     title       : 'コードの最適化を行う',
-    description : 'Optimize code',
+    description : 'コードの最適化を行う',
     members     : mockDataAvatars,
     tags        : [
       'Optimization', 'Frontend' 
