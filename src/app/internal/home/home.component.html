@@ -3,7 +3,7 @@
     <!-- <div class="h-16 px-3"></div> -->
     <!-- メインコンテンツ -->
     <div class="flex h-full flex-row bg-gradient-to-r from-[rgba(241,242,255,1)] to-[rgba(255,247,252,1)]">
-        <div class="h-full border-r" [@sidebarAnimation] = " isOpenTaskStatusSidebar() ? 'open':'close' ">
+        <div class="h-full border-r" [@sidebarAnimation] = " $isOpenTaskStatusSidebar() ? 'open':'close' ">
             <div class="gap-4 px-5 pt-5">
                 <div clss="flex flex-col gap-2">
                     <h4 class="pb-4">Task Ratio</h4>
@@ -19,7 +19,7 @@
             <div class="flex w-full items-center justify-between pb-1">
                 <div class="flex flex-col">
                     <p-button icon="pi pi-align-left" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickIsOpenTaskStatusSidebar()"></p-button>
-                    <h1 class="font-bold">Tasks</h1>
+                    <h1 class="font-semibold">Tasks</h1>
                 </div>
                 <div class="flex gap-2">
                     <p-avatar [style]="$user().style" [label]="$user().label" [size]="$user().size" [shape]="$user().shape"></p-avatar>
@@ -77,12 +77,12 @@
                                                 <p-tag [styleClass]="task.tagStyleClass" [rounded]="true" [value]="tag"></p-tag>
                                             }
                                         </div>
-                                        <p>{{task.title}}</p>
+                                        <p class="text-sm">{{task.title}}</p>
                                         <div class="flex items-center justify-between">
                                             <div>
-                                                <div class="flex flex-row items-center justify-center gap-2 text-slate-400">
+                                                <div class="flex flex-row items-center justify-center gap-2 text-slate-400 text-xs">
                                                     <i class="pi pi-flag"></i>
-                                                    <p class="text-sm">{{task.endDate | date:'MMM d'}}</p>
+                                                    <p>{{task.endDate | date:'MMM d'}}</p>
                                                 </div>
                                             </div>
                                             <p-avatarGroup>
@@ -93,10 +93,10 @@
                                         </div>
                                         <div class="flex flex-row items-center justify-end">
                                             @if(status !== 'Ready'){
-                                                <p-button icon="pi pi-angle-left" severity="secondary" [rounded]="true" [text]="true"></p-button>
+                                                <p-button size="small" icon="pi pi-angle-left" severity="secondary" [rounded]="true" [text]="true"></p-button>
                                             }
                                             @if(status !== 'Done'){
-                                                <p-button icon="pi pi-angle-right" severity="secondary" [rounded]="true" [text]="true"></p-button>
+                                                <p-button size="small" icon="pi pi-angle-right" severity="secondary" [rounded]="true" [text]="true"></p-button>
                                             }
                                         </div>
                                     </div>

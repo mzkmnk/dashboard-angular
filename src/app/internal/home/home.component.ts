@@ -53,7 +53,7 @@ export class HomeComponent {
 
   $editingTasks: Signal<TEditingTasks> = this.homeSignalStore.editingTasks;
 
-  isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(true);
+  $isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(false);
 
 
   taskStatus: TTaskStatus[] = [
@@ -75,7 +75,7 @@ export class HomeComponent {
    * サイドバーの表示非表示を切り替える。
    * @returns 
    */
-  onClickIsOpenTaskStatusSidebar = ():void => this.isOpenTaskStatusSidebar.update((value) => !value);
+  onClickIsOpenTaskStatusSidebar = ():void => this.$isOpenTaskStatusSidebar.update((value) => !value);
 
   /**
    * 全てのタスクのステータスの割合を取得する。
