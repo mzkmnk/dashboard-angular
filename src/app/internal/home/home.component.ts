@@ -113,7 +113,7 @@ export class HomeComponent {
     tags.forEach((tag) => {
       const tagCount = tasksStatus.filter((task) => task.tags.includes(tag)).length;
       meterItems.push({
-        label : tag,
+        label : tag.name,
         value : tagCount,
         color : this.getRandomColor()
       });

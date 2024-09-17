@@ -35,7 +35,7 @@ export type TTaskData = {
   title         : string,
   description   : string,
   members       : TUser[],
-  tags          : string[],
+  tags          : TTag[],
   tagStyleClass : string,
   startDate     : Date,
   endDate       : Date
@@ -43,7 +43,12 @@ export type TTaskData = {
 
 export type TEditingTasks = Record<number,TTaskData>;
 
-export const tags = [
+export type TTag = {
+  name : string,
+  code : string,
+}
+
+export const tags:TTag[] = [
   {
     name : 'Frontend',
     code : 'Frontend'
@@ -89,7 +94,8 @@ export const tasksData: TTaskData[] = [
     description : 'デザインを作成する',
     members     : mockDataAvatars,
     tags        : [
-      'UI Design', 'UX Design' 
+      { name: 'UI Design', code: 'UI Design' }, 
+      { name: 'UX Design', code: 'UX Design' }
     ],
     tagStyleClass : 'font-medium p-2 bg-pink-secondary text-pink-primary',
     startDate     : new Date(),
@@ -102,7 +108,8 @@ export const tasksData: TTaskData[] = [
     description : 'dashboardを作成する',
     members     : mockDataAvatars,
     tags        : [
-      'Programming', 'Frontend' 
+      { name: 'Programming', code: 'Programming' }, 
+      { name: 'Frontend', code: 'Frontend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
     startDate     : new Date(),
@@ -114,7 +121,7 @@ export const tasksData: TTaskData[] = [
     title         : 'タスクのendDateで日付をソートする関数を作成する',
     description   : 'タスクのendDateで日付をソートする関数を作成する',
     members       : mockDataAvatars,
-    tags          : [ 'Frontend' ],
+    tags          : [ { name: 'Frontend', code: 'Frontend' } ],
     tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
     startDate     : new Date(),
     endDate       : new Date(new Date().setDate(new Date().getDate() + 2))
@@ -126,7 +133,8 @@ export const tasksData: TTaskData[] = [
     description : 'APIのドキュメントを作成する',
     members     : mockDataAvatars,
     tags        : [
-      'Documentation', 'Backend' 
+      { name: 'Documentation', code: 'Documentation' }, 
+      { name: 'Backend', code: 'Backend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
     startDate     : new Date(),
@@ -139,7 +147,8 @@ export const tasksData: TTaskData[] = [
     description : 'ユニットテストを実装する',
     members     : mockDataAvatars,
     tags        : [
-      'Testing', 'Backend' 
+      { name: 'Testing', code: 'Testing' }, 
+      { name: 'Backend', code: 'Backend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
     startDate     : new Date(),
@@ -152,7 +161,8 @@ export const tasksData: TTaskData[] = [
     description : '新しい機能を設計する',
     members     : mockDataAvatars,
     tags        : [
-      'Design', 'Planning' 
+      { name: 'Design', code: 'Design' }, 
+      { name: 'Planning', code: 'Planning' }
     ],
     tagStyleClass : 'font-medium p-2 bg-pink-secondary text-pink-primary',
     startDate     : new Date(),
@@ -165,7 +175,8 @@ export const tasksData: TTaskData[] = [
     description : 'コードレビューを行う',
     members     : mockDataAvatars,
     tags        : [
-      'Review', 'Backend' 
+      { name: 'Review', code: 'Review' }, 
+      { name: 'Backend', code: 'Backend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
     startDate     : new Date(),
@@ -178,7 +189,8 @@ export const tasksData: TTaskData[] = [
     description : 'バグを修正する',
     members     : mockDataAvatars,
     tags        : [
-      'Bugfix', 'Frontend' 
+      { name: 'Bugfix', code: 'Bugfix' }, 
+      { name: 'Frontend', code: 'Frontend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
     startDate     : new Date(),
@@ -191,7 +203,8 @@ export const tasksData: TTaskData[] = [
     description : 'パフォーマンスを最適化する',
     members     : mockDataAvatars,
     tags        : [
-      'Optimization', 'Backend' 
+      { name: 'Optimization', code: 'Optimization' }, 
+      { name: 'Backend', code: 'Backend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
     startDate     : new Date(),
@@ -204,7 +217,8 @@ export const tasksData: TTaskData[] = [
     description : 'ユーザーインターフェースを改善する',
     members     : mockDataAvatars,
     tags        : [
-      'UI Design', 'Frontend' 
+      { name: 'UI Design', code: 'UI Design' }, 
+      { name: 'Frontend', code: 'Frontend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-pink-secondary text-pink-primary',
     startDate     : new Date(),
@@ -217,7 +231,8 @@ export const tasksData: TTaskData[] = [
     description : 'データベースを設計する',
     members     : mockDataAvatars,
     tags        : [
-      'Database', 'Backend' 
+      { name: 'Database', code: 'Database' }, 
+      { name: 'Backend', code: 'Backend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
     startDate     : new Date(),
@@ -230,7 +245,8 @@ export const tasksData: TTaskData[] = [
     description : 'セキュリティを強化する',
     members     : mockDataAvatars,
     tags        : [
-      'Security', 'Backend' 
+      { name: 'Security', code: 'Security' }, 
+      { name: 'Backend', code: 'Backend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
     startDate     : new Date(),
@@ -243,7 +259,8 @@ export const tasksData: TTaskData[] = [
     description : 'プロジェクトのドキュメントを更新する',
     members     : mockDataAvatars,
     tags        : [
-      'Documentation', 'Planning' 
+      { name: 'Documentation', code: 'Documentation' }, 
+      { name: 'Planning', code: 'Planning' }
     ],
     tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
     startDate     : new Date(),
@@ -256,7 +273,8 @@ export const tasksData: TTaskData[] = [
     description : '新しいライブラリを調査する',
     members     : mockDataAvatars,
     tags        : [
-      'Research', 'Planning' 
+      { name: 'Research', code: 'Research' }, 
+      { name: 'Planning', code: 'Planning' }
     ],
     tagStyleClass : 'font-medium p-2 bg-pink-secondary text-pink-primary',
     startDate     : new Date(),
@@ -269,7 +287,8 @@ export const tasksData: TTaskData[] = [
     description : 'テストケースを作成する',
     members     : mockDataAvatars,
     tags        : [
-      'Testing', 'Frontend' 
+      { name: 'Testing', code: 'Testing' }, 
+      { name: 'Frontend', code: 'Frontend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
     startDate     : new Date(),
@@ -282,7 +301,8 @@ export const tasksData: TTaskData[] = [
     description : 'コードのリファクタリングを行う',
     members     : mockDataAvatars,
     tags        : [
-      'Refactoring', 'Backend' 
+      { name: 'Refactoring', code: 'Refactoring' }, 
+      { name: 'Backend', code: 'Backend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
     startDate     : new Date(),
@@ -295,7 +315,8 @@ export const tasksData: TTaskData[] = [
     description : 'ユーザーテストを実施する',
     members     : mockDataAvatars,
     tags        : [
-      'Testing', 'UX' 
+      { name: 'Testing', code: 'Testing' }, 
+      { name: 'UX', code: 'UX' }
     ],
     tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
     startDate     : new Date(),
@@ -308,7 +329,8 @@ export const tasksData: TTaskData[] = [
     description : 'プロジェクトのロードマップを作成する',
     members     : mockDataAvatars,
     tags        : [
-      'Planning', 'Management' 
+      { name: 'Planning', code: 'Planning' }, 
+      { name: 'Management', code: 'Management' }
     ],
     tagStyleClass : 'font-medium p-2 bg-pink-secondary text-pink-primary',
     startDate     : new Date(),
@@ -321,7 +343,8 @@ export const tasksData: TTaskData[] = [
     description : '新しいフレームワークを導入する',
     members     : mockDataAvatars,
     tags        : [
-      'Framework', 'Frontend' 
+      { name: 'Framework', code: 'Framework' }, 
+      { name: 'Frontend', code: 'Frontend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
     startDate     : new Date(),
@@ -334,7 +357,8 @@ export const tasksData: TTaskData[] = [
     description : 'コードの最適化を行う',
     members     : mockDataAvatars,
     tags        : [
-      'Optimization', 'Frontend' 
+      { name: 'Optimization', code: 'Optimization' }, 
+      { name: 'Frontend', code: 'Frontend' }
     ],
     tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
     startDate     : new Date(),
