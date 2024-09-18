@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe, KeyValuePipe } from '@angular/common';
-import { Component, computed, effect, inject, Signal, signal,  WritableSignal } from '@angular/core';
+import { Component, computed, inject, Signal, signal,  WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
@@ -54,11 +54,6 @@ import { tags, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } 
   styleUrl    : './home.component.scss'
 })
 export class HomeComponent {
-  constructor() {
-    effect(() => {
-      console.log(this.$editingTasks());
-    })
-  }
   private readonly homeSignalStore = inject(homeSignalStore);
 
   $user: Signal<TUser> = this.homeSignalStore.user;

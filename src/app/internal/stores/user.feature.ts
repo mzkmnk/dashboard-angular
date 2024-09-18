@@ -34,7 +34,6 @@ export const withUserMethods = (dexieDB:AppDB) => {
           tap(() => patchState(signalStore,{common: {isLoading: false}})),
           switchMap(async({updateUser,initial}) => {
             const user:TUser|undefined = await dexieDB.updateUser(updateUser,initial);
-            console.log('user',user);
             if(user){
               patchState(signalStore,{user: {...user}})
             }

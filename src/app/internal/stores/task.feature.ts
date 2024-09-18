@@ -25,7 +25,6 @@ export const withTaskMethods = (dexieDB:AppDB) => {
       ),
 
       showAddTask(task:TTaskData,editingTasks:TEditingTasks):void {
-        console.log('ok');
         patchState(signalStore,{
           editingTasks: {
             [task.id]: task,
