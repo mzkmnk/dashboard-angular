@@ -1,44 +1,21 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { DatePipe } from '@angular/common';
-import { Component, signal,  WritableSignal } from '@angular/core';
+import { DatePipe, KeyValuePipe } from '@angular/common';
+import { Component, computed, inject, Signal, signal,  WritableSignal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { DividerModule } from 'primeng/divider';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MeterGroupModule, MeterItem } from 'primeng/metergroup';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
 
-export type AvatarInterface = {
-  path  : string,
-  label : string,
-  size  : 'large' | 'normal' | 'xlarge' | undefined,
-  shape : 'square' | 'circle' | undefined,
-  style : {
-    [key in string]:string
-  } 
-}
-
-export type TaskStatus = 'Ready' | 'On Progress' | 'Needs Review' | 'Done';
-
-// eslint-disable-next-line @stylistic/max-len
-export type Tags = 'Frontend' | 'Backend' | 'Design' | 'Planning' | 'Management' | 'Testing' | 'Documentation' | 'Review' | 'Bugfix' | 'Optimization' | 'Research' | 'Refactoring' | 'UX' | 'Framework' | 'Security' | 'Database' | 'UI Design';
-
-export type colorTheme = '#de89ea' | '#46bd83' | '#07a0f7';
-
-export type CustomMeterItem = {
-  label: TaskStatus
-} & MeterItem
-
-export type TaskData = {
-  id            : number,
-  status        : TaskStatus,
-  title         : string,
-  description   : string,
-  members       : AvatarInterface[],
-  tags          : string[],
-  tagStyleClass : string,
-  startDate     : Date,
-  endDate       : Date
-}
+import { homeSignalStore } from '../stores/home.signal-store';
+import { tags, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
 
 @Component({
   selector   : 'app-home',
@@ -49,7 +26,15 @@ export type TaskData = {
     AvatarGroupModule,
     TagModule,
     DatePipe,
-    MeterGroupModule
+    MeterGroupModule,
+    InputTextareaModule,
+    FloatLabelModule,
+    FormsModule,
+    CalendarModule,
+    KeyValuePipe,
+    DividerModule,
+    MultiSelectModule,
+    ToastModule,
   ],
   animations: [
     trigger('sidebarAnimation',[
@@ -69,58 +54,79 @@ export type TaskData = {
   styleUrl    : './home.component.scss'
 })
 export class HomeComponent {
+  private readonly homeSignalStore = inject(homeSignalStore);
 
-  isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(true);
+  $user: Signal<TUser> = this.homeSignalStore.user;
 
+  $tasks: Signal<TTaskData[]> = this.homeSignalStore.tasks;
 
-  taskStatus: TaskStatus[] = [
-    'Ready','On Progress','Needs Review','Done' 
+  $editingTasks: Signal<TEditingTasks> = this.homeSignalStore.editingTasks;
+
+  $isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(false);
+
+  tags = tags;
+
+  taskStatus: TTaskStatus[] = [
+    'Ready','Progress','Review','Done' 
   ];
 
-  taskStatusColor: {[key in TaskStatus]: string } = {
-    'Ready'        : '#de89ea',
-    'On Progress'  : '#46bd83',
-    'Needs Review' : '#07a0f7',
-    'Done'         : '#f3dff5'
+  taskStatusColor: {[key in TTaskStatus]: string } = {
+    Ready    : '#de89ea',
+    Progress : '#46bd83',
+    Review   : '#07a0f7',
+    Done     : '#f3dff5'
   }
 
-  statusMeterItems: CustomMeterItem[];
+  $statusMeterItems: Signal<TCustomMeterItem[]> = computed(() => this.getStatusRatio(this.$tasks()));
 
-  tagsMeterItems: MeterItem[];
+  $tagsMeterItems: Signal<MeterItem[]> = computed(() => this.getTagRatio(this.$tasks()));
 
-  constructor(){
-    this.tasksData = this.tasksData.sort((a,b) => a.endDate.getTime() - b.endDate.getTime());
-    this.statusMeterItems = this.getStatusRatio(this.tasksData);
-    this.tagsMeterItems = this.getTagRatio(this.tasksData);
-  }
+  tmpValue: Date = new Date();
 
-  onClickIsOpenTaskStatusSidebar = ():void => this.isOpenTaskStatusSidebar.update((value) => !value);
+  /**
+   * サイドバーの表示非表示を切り替える。
+   * @returns 
+   */
+  onClickIsOpenTaskStatusSidebar = ():void => this.$isOpenTaskStatusSidebar.update((value) => !value);
 
-  getStatusRatio = (tasksStatus: TaskData[]):CustomMeterItem[] => {
-    const meterItems : CustomMeterItem[] = [
+  /**
+   * 全てのタスクのステータスの割合を取得する。
+   * @param tasksStatus 
+   * @returns 
+   */
+  getStatusRatio = (tasksStatus: TTaskData[]):TCustomMeterItem[] => {
+    const meterItems : TCustomMeterItem[] = [
       {label: 'Ready',value: tasksStatus.filter((task) => task.status === 'Ready').length,color: this.taskStatusColor.Ready},
-      {label: 'On Progress',value: tasksStatus.filter((task) => task.status === 'On Progress').length,color: this.taskStatusColor['On Progress']},
-      {label: 'Needs Review',value: tasksStatus.filter((task) => task.status === 'Needs Review').length,color: this.taskStatusColor['Needs Review']},
+      {label: 'Progress',value: tasksStatus.filter((task) => task.status === 'Progress').length,color: this.taskStatusColor.Progress},
+      {label: 'Review',value: tasksStatus.filter((task) => task.status === 'Review').length,color: this.taskStatusColor.Review},
       {label: 'Done',value: tasksStatus.filter((task) => task.status === 'Done').length,color: this.taskStatusColor.Done}
     ];
     return meterItems;
   }
 
-  getTagRatio = (tasksStatus: TaskData[]):MeterItem[] => {
+  /**
+   * 全てのタグの割合を取得する。
+   * @param tasksStatus 
+   * @returns 
+   */
+  getTagRatio = (tasksStatus: TTaskData[]):MeterItem[] => {
     const tags = new Set(tasksStatus.map((task) => task.tags).flat());
     const meterItems : MeterItem[] = [];
     tags.forEach((tag) => {
       const tagCount = tasksStatus.filter((task) => task.tags.includes(tag)).length;
       meterItems.push({
-        label : tag,
+        label : tag.name,
         value : tagCount,
         color : this.getRandomColor()
       });
     });
-    console.log(meterItems);
     return meterItems;
   }
 
+  /**
+   * 適当なカラーコードを生成する。
+   * @returns 
+   */
   getRandomColor = () : string => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -130,283 +136,40 @@ export class HomeComponent {
     return color;
   }
 
-  // ここからサンプルデータ
+  /**
+   * タスクが編集中かどうかを判定する。
+   * @param task 
+   * @param editingTasks 
+   * @returns 
+   */
+  includeEditingTask = (task:TTaskData,editingTasks:TEditingTasks):boolean => {
+    return Object.keys(editingTasks).includes(task.id.toString());
+  }
 
-  mockDataAvatars: AvatarInterface[] = [
-    {
-      path  : 'assets/icons/icon1.jpg',
-      label : 'M',
-      size  : 'large',
-      style : { 'background-color': '#ece9fc' },
-      shape : 'circle'
-    },
-    {
-      path  : 'assets/icons/icon2.jpg',
-      label : 'S',
-      size  : 'large',
-      style : { 'background-color': '#dee9fc' },
-      shape : 'circle'
-    }
-  ]
+  onClickCancelEditingTask = (taskId:number):void => {
+    this.homeSignalStore.cancelEditingTask(taskId,this.$editingTasks());
+  }
 
-  tasksData: TaskData[] = [
-    {
-      id          : 0,
-      status      : 'Ready',
-      title       : 'デザインを作成する',
-      description : 'Create a new design for the homepage',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'UI Design', 'UX Design' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-pink-secondary text-pink-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 7))
+  getMaxNumberEditingTask = (editingTasks:TEditingTasks):number => {
+    return Object.keys(editingTasks).map((key) => parseInt(key)).reduce((a,b) => Math.max(a,b),0);
+  }
+
+  onClickShowAddTask = (taskStatus:TTaskStatus) :void => {
+    this.homeSignalStore.showAddTask({
+      status      : taskStatus,
+      id          : this.getMaxNumberEditingTask(this.$editingTasks()) + 1, //仮のID
+      title       : '',
+      description : '',
+      members     : [ this.$user() ],
+      tags        : [],
+      startDate   : new Date(),
+      endDate     : new Date(new Date().setDate(new Date().getDate() + 7)),
     },
-    {
-      id          : 1,
-      status      : 'On Progress',
-      title       : 'dashboardを作成する',
-      description : 'Create a new design for the homepage',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Programming', 'Frontend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 7))
-    },
-    {
-      id            : 2,
-      status        : 'On Progress',
-      title         : 'タスクのendDateで日付をソートする関数を作成する',
-      description   : 'Create a new design for the homepage',
-      members       : this.mockDataAvatars,
-      tags          : [ 'Frontend' ],
-      tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 2))
-    },
-    {
-      id          : 3,
-      status      : 'Needs Review',
-      title       : 'APIのドキュメントを作成する',
-      description : 'Create API documentation',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Documentation', 'Backend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 5))
-    },
-    {
-      id          : 4,
-      status      : 'Done',
-      title       : 'ユニットテストを実装する',
-      description : 'Implement unit tests',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Testing', 'Backend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 3))
-    },
-    {
-      id          : 5,
-      status      : 'Ready',
-      title       : '新しい機能を設計する',
-      description : 'Design new feature',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Design', 'Planning' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-pink-secondary text-pink-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 10))
-    },
-    {
-      id          : 6,
-      status      : 'On Progress',
-      title       : 'コードレビューを行う',
-      description : 'Conduct code review',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Review', 'Backend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 4))
-    },
-    {
-      id          : 7,
-      status      : 'Needs Review',
-      title       : 'バグを修正する',
-      description : 'Fix bugs',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Bugfix', 'Frontend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 6))
-    },
-    {
-      id          : 8,
-      status      : 'Done',
-      title       : 'パフォーマンスを最適化する',
-      description : 'Optimize performance',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Optimization', 'Backend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 8))
-    },
-    {
-      id          : 9,
-      status      : 'Ready',
-      title       : 'ユーザーインターフェースを改善する',
-      description : 'Improve user interface',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'UI Design', 'Frontend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-pink-secondary text-pink-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 9))
-    },
-    {
-      id          : 10,
-      status      : 'On Progress',
-      title       : 'データベースを設計する',
-      description : 'Design database',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Database', 'Backend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 12))
-    },
-    {
-      id          : 11,
-      status      : 'Needs Review',
-      title       : 'セキュリティを強化する',
-      description : 'Enhance security',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Security', 'Backend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 11))
-    },
-    {
-      id          : 12,
-      status      : 'Done',
-      title       : 'プロジェクトのドキュメントを更新する',
-      description : 'Update project documentation',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Documentation', 'Planning' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 7))
-    },
-    {
-      id          : 13,
-      status      : 'Ready',
-      title       : '新しいライブラリを調査する',
-      description : 'Research new libraries',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Research', 'Planning' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-pink-secondary text-pink-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 5))
-    },
-    {
-      id          : 14,
-      status      : 'On Progress',
-      title       : 'テストケースを作成する',
-      description : 'Create test cases',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Testing', 'Frontend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 6))
-    },
-    {
-      id          : 15,
-      status      : 'Needs Review',
-      title       : 'コードのリファクタリングを行う',
-      description : 'Refactor code',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Refactoring', 'Backend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 4))
-    },
-    {
-      id          : 16,
-      status      : 'Done',
-      title       : 'ユーザーテストを実施する',
-      description : 'Conduct user testing',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Testing', 'UX' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-red-secondary text-red-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 3))
-    },
-    {
-      id          : 17,
-      status      : 'Ready',
-      title       : 'プロジェクトのロードマップを作成する',
-      description : 'Create project roadmap',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Planning', 'Management' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-pink-secondary text-pink-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 8))
-    },
-    {
-      id          : 18,
-      status      : 'On Progress',
-      title       : '新しいフレームワークを導入する',
-      description : 'Implement new framework',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Framework', 'Frontend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-blue-secondary text-blue-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 10))
-    },
-    {
-      id          : 19,
-      status      : 'Needs Review',
-      title       : 'コードの最適化を行う',
-      description : 'Optimize code',
-      members     : this.mockDataAvatars,
-      tags        : [
-        'Optimization', 'Frontend' 
-      ],
-      tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 9))
-    }
-  ]
+    this.$editingTasks()
+    );
+  }
+
+  onClickSaveTask = (taskId:number):void => {
+    this.homeSignalStore.saveTask({taskId,tasks: this.$tasks(),editingTasks: this.$editingTasks()});
+  }
 }
