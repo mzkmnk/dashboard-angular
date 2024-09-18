@@ -3,7 +3,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import { AppDB } from '../../dexie/db';
-import { tasksData, TEditingTasks, TTaskData } from '../types/home.type';
+import { TEditingTasks, TTaskData } from '../types/home.type';
 
 // todo 関数の戻り値の型を定義する
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -15,8 +15,8 @@ export const withTaskMethods = (dexieDB:AppDB) => {
         pipe(
           tap(() => patchState(signalStore,{common: {isLoading: true}})),
           switchMap(async () => {
-            // todo mockDataをひとまずstoreに入れる
-            patchState(signalStore,{tasks: tasksData.sort((a,b) => a.endDate.getTime() - b.endDate.getTime())});
+            const tasks = await dexieDB.getTasks();
+            patchState(signalStore,{tasks: tasks.sort((a,b) => a.endDate.getTime() - b.endDate.getTime())});
           }),
           tap(() => patchState(signalStore,{common: {isLoading: false}})),
         )
@@ -39,17 +39,20 @@ export const withTaskMethods = (dexieDB:AppDB) => {
 
       saveTask: rxMethod<{ taskId: number,tasks: TTaskData[],editingTasks: TEditingTasks }>(
         pipe(
+          tap(() => patchState(signalStore,{common: {isLoading: true}})),
           switchMap(async ({taskId,tasks,editingTasks}) => {
+            await dexieDB.addTask(editingTasks[taskId]);
             patchState(signalStore,{
               editingTasks : deleteObject(editingTasks,taskId),
               tasks        : [
                 {
                   ...editingTasks[taskId],
                 },
-                ...tasks 
+                ...tasks.sort((a,b) => a.endDate.getTime() - b.endDate.getTime())
               ]
             })
           }),
+          tap(() => patchState(signalStore,{common: {isLoading: false}})),
         )),
     })),
   )

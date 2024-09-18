@@ -40,8 +40,8 @@ export class AppDB extends Dexie {
   /**
    * 全てのタスクを取得する
    */
-  getTasks = async () : Promise<void> => {
-    console.log(await DB.tasks.toArray());
+  getTasks = async () : Promise<TTaskData[]> => {
+    return await DB.tasks.toArray()
   }
 
   /**
