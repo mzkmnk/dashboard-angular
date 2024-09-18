@@ -1,8 +1,10 @@
+<p-toast />
+
 <div class="h-screen w-screen">
     <!-- ヘッダー -->
     <!-- <div class="h-16 px-3"></div> -->
     <!-- メインコンテンツ -->
-    <div class="flex h-full flex-row bg-gradient-to-r from-[rgba(241,242,255,1)] to-[rgba(255,247,252,1)]">
+    <div class="flex h-full flex-row bg-gradient-to-r from-[#c0f2f4] to-[#ABBEE0]">
         <div class="h-full border-r" [@sidebarAnimation] = " $isOpenTaskStatusSidebar() ? 'open':'close' ">
             <div class="gap-4 px-5 pt-5">
                 <div clss="flex flex-col gap-2">
@@ -33,9 +35,9 @@
                             <p-button styleClass="text-xl" icon="pi pi-plus" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickShowAddTask(status)"></p-button>
                         </div>
                         <div class="scrollbar h-[calc(100vh-180px)] overflow-auto rounded-b-2xl">
-                            @for(editTask of $editingTasks()|keyvalue;let j=$index; track j){
+                            @for(editTask of $editingTasks()|keyvalue;track editTask.key){
                                 @if(editTask.value.status === status){
-                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4 shadow-lg shadow-slate-100">
+                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4">
                                         <textarea
                                             style="resize: none;"
                                             pInputTextarea
@@ -86,7 +88,7 @@
                             }
                             @for(task of $tasks();let j = $index; track j){
                                 @if(task.status === status){
-                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4 shadow-lg shadow-slate-100">
+                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4">
                                         <div class="flex flex-row gap-2">
                                             @for(tag of task.tags;let k=$index; track k){
                                                 <p-tag [styleClass]="task.tagStyleClass" [rounded]="true" [value]="tag.name"></p-tag>

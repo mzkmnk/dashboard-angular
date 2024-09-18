@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe, KeyValuePipe } from '@angular/common';
-import { Component, computed, inject, Signal, signal,  WritableSignal } from '@angular/core';
+import { Component, computed, effect, inject, Signal, signal,  WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
@@ -12,6 +12,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MeterGroupModule, MeterItem } from 'primeng/metergroup';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
 
 import { homeSignalStore } from '../stores/home.signal-store';
 import { tags, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
@@ -33,6 +34,7 @@ import { tags, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } 
     KeyValuePipe,
     DividerModule,
     MultiSelectModule,
+    ToastModule,
   ],
   animations: [
     trigger('sidebarAnimation',[
@@ -52,6 +54,11 @@ import { tags, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } 
   styleUrl    : './home.component.scss'
 })
 export class HomeComponent {
+  constructor() {
+    effect(() => {
+      console.log(this.$editingTasks());
+    })
+  }
   private readonly homeSignalStore = inject(homeSignalStore);
 
   $user: Signal<TUser> = this.homeSignalStore.user;
@@ -148,10 +155,14 @@ export class HomeComponent {
     this.homeSignalStore.cancelEditingTask(taskId,this.$editingTasks());
   }
 
+  getMaxNumberEditingTask = (editingTasks:TEditingTasks):number => {
+    return Object.keys(editingTasks).map((key) => parseInt(key)).reduce((a,b) => Math.max(a,b),0);
+  }
+
   onClickShowAddTask = (taskStatus:TTaskStatus) :void => {
     this.homeSignalStore.showAddTask({
       status        : taskStatus,
-      id            : this.$tasks().length,
+      id            : this.getMaxNumberEditingTask(this.$editingTasks()) + 1, //仮のID
       title         : '',
       description   : '',
       members       : [ this.$user() ],

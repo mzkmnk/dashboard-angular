@@ -1,5 +1,7 @@
+import { inject } from '@angular/core';
 import { patchState, signalStoreFeature, withMethods } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { MessageService } from 'primeng/api';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import { AppDB } from '../../dexie/db';
@@ -9,7 +11,7 @@ import { TEditingTasks, TTaskData } from '../types/home.type';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const withTaskMethods = (dexieDB:AppDB) => {
   return signalStoreFeature(
-    withMethods((signalStore) => ({
+    withMethods((signalStore,messageService = inject(MessageService)) => ({
 
       getTasks: rxMethod<undefined>(
         pipe(
@@ -23,6 +25,7 @@ export const withTaskMethods = (dexieDB:AppDB) => {
       ),
 
       showAddTask(task:TTaskData,editingTasks:TEditingTasks):void {
+        console.log('ok');
         patchState(signalStore,{
           editingTasks: {
             [task.id]: task,
@@ -41,7 +44,8 @@ export const withTaskMethods = (dexieDB:AppDB) => {
         pipe(
           tap(() => patchState(signalStore,{common: {isLoading: true}})),
           switchMap(async ({taskId,tasks,editingTasks}) => {
-            await dexieDB.addTask(editingTasks[taskId]);
+            const maxId = await dexieDB.getTasksMaxId();
+            await dexieDB.addTask({...editingTasks[taskId],id: maxId + 1});
             patchState(signalStore,{
               editingTasks : deleteObject(editingTasks,taskId),
               tasks        : [
@@ -53,6 +57,9 @@ export const withTaskMethods = (dexieDB:AppDB) => {
             })
           }),
           tap(() => patchState(signalStore,{common: {isLoading: false}})),
+          tap(() => {
+            messageService.add({severity: 'success',summary: 'Success',detail: 'Task added successfully'});
+          })
         )),
     })),
   )

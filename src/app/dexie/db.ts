@@ -45,11 +45,18 @@ export class AppDB extends Dexie {
   }
 
   /**
+   * タスクの最大値のIDを取得する。
+   */
+  getTasksMaxId = async ():Promise<number> => {
+    return await DB.tasks.orderBy('id').last().then(task => task?.id || 0);
+  }
+
+  /**
    * タスクを追加する。
    * @param task タスクデータ
    */
-  addTask = async (task:TTaskData) : Promise<void> => {
-    await DB.tasks.add(task);
+  addTask = async (task:TTaskData) : Promise<number> => {
+    return await DB.tasks.add(task);
   }
 }
 
