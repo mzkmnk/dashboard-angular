@@ -30,15 +30,14 @@ export type TCustomMeterItem = {
 } & MeterItem
   
 export type TTaskData = {
-  id            : number,
-  status        : TTaskStatus,
-  title         : string,
-  description   : string,
-  members       : TUser[],
-  tags          : TTag[],
-  tagStyleClass : string,
-  startDate     : Date,
-  endDate       : Date
+  id          : number,
+  status      : TTaskStatus,
+  title       : string,
+  description : string,
+  members     : TUser[],
+  tags        : TTag[],
+  startDate   : Date,
+  endDate     : Date
 }
 
 export type TEditingTasks = Record<number,TTaskData>;

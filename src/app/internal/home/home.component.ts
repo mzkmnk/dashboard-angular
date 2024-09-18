@@ -156,15 +156,14 @@ export class HomeComponent {
 
   onClickShowAddTask = (taskStatus:TTaskStatus) :void => {
     this.homeSignalStore.showAddTask({
-      status        : taskStatus,
-      id            : this.getMaxNumberEditingTask(this.$editingTasks()) + 1, //仮のID
-      title         : '',
-      description   : '',
-      members       : [ this.$user() ],
-      tags          : [],
-      tagStyleClass : 'font-medium p-2 bg-green-secondary text-green-primary',
-      startDate     : new Date(),
-      endDate       : new Date(new Date().setDate(new Date().getDate() + 7)),
+      status      : taskStatus,
+      id          : this.getMaxNumberEditingTask(this.$editingTasks()) + 1, //仮のID
+      title       : '',
+      description : '',
+      members     : [ this.$user() ],
+      tags        : [],
+      startDate   : new Date(),
+      endDate     : new Date(new Date().setDate(new Date().getDate() + 7)),
     },
     this.$editingTasks()
     );
