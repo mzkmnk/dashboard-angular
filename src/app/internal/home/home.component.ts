@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe, KeyValuePipe } from '@angular/common';
-import { Component, computed, inject, Signal, signal,  WritableSignal } from '@angular/core';
+import { Component, inject, Signal, signal,  WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
@@ -9,7 +9,6 @@ import { CalendarModule } from 'primeng/calendar';
 import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { MeterGroupModule, MeterItem } from 'primeng/metergroup';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
@@ -26,7 +25,6 @@ import { tags, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } 
     AvatarGroupModule,
     TagModule,
     DatePipe,
-    MeterGroupModule,
     InputTextareaModule,
     FloatLabelModule,
     FormsModule,
@@ -37,6 +35,8 @@ import { tags, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } 
     ToastModule,
   ],
   animations: [
+    // サイドバーのアニメーション
+    // 今後使う予定があるので残しておく。
     trigger('sidebarAnimation',[
       state('open',style({
         width   : '25%',
@@ -77,10 +77,6 @@ export class HomeComponent {
     Done     : '#f3dff5'
   }
 
-  $statusMeterItems: Signal<TCustomMeterItem[]> = computed(() => this.getStatusRatio(this.$tasks()));
-
-  $tagsMeterItems: Signal<MeterItem[]> = computed(() => this.getTagRatio(this.$tasks()));
-
   tmpValue: Date = new Date();
 
   /**
@@ -101,25 +97,6 @@ export class HomeComponent {
       {label: 'Review',value: tasksStatus.filter((task) => task.status === 'Review').length,color: this.taskStatusColor.Review},
       {label: 'Done',value: tasksStatus.filter((task) => task.status === 'Done').length,color: this.taskStatusColor.Done}
     ];
-    return meterItems;
-  }
-
-  /**
-   * 全てのタグの割合を取得する。
-   * @param tasksStatus 
-   * @returns 
-   */
-  getTagRatio = (tasksStatus: TTaskData[]):MeterItem[] => {
-    const tags = new Set(tasksStatus.map((task) => task.tags).flat());
-    const meterItems : MeterItem[] = [];
-    tags.forEach((tag) => {
-      const tagCount = tasksStatus.filter((task) => task.tags.includes(tag)).length;
-      meterItems.push({
-        label : tag.name,
-        value : tagCount,
-        color : this.getRandomColor()
-      });
-    });
     return meterItems;
   }
 
