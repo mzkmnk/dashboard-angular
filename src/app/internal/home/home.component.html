@@ -4,7 +4,7 @@
     <!-- ヘッダー -->
     <!-- <div class="h-16 px-3"></div> -->
     <!-- メインコンテンツ -->
-    <div class="flex h-full flex-row bg-gradient-to-r from-[#c0f2f4] to-[#ABBEE0]">
+    <div class="flex h-full flex-row">
         <div class="h-full w-full px-14 pt-1">
             <div class="flex w-full items-center justify-between pb-1">
                 <div class="flex flex-col">
@@ -14,17 +14,17 @@
                     <p-avatar [style]="$user().style" [label]="$user().label" [size]="$user().size" [shape]="$user().shape"></p-avatar>
                 </div>
             </div>
-            <div class="grid grid-cols-4 gap-8">
+            <div class="dot grid grid-cols-4 gap-8">
                 @for(status of taskStatus;let i = $index; track i){
                     <div class="flex h-full flex-col">
                         <div class="flex items-center justify-between pb-5">
                             <h4 class="font-medium">{{ status }}</h4>
                             <p-button styleClass="text-xl" icon="pi pi-plus" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickShowAddTask(status)"></p-button>
                         </div>
-                        <div class="scrollbar h-[calc(100vh-180px)] overflow-auto rounded-b-2xl">
+                        <div class="scrollbar h-[calc(100vh-100px)] overflow-auto rounded-b-2xl">
                             @for(editTask of $editingTasks()|keyvalue;track editTask.key){
                                 @if(editTask.value.status === status){
-                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4">
+                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl border bg-white px-4 pt-4">
                                         <textarea
                                             style="resize: none;"
                                             pInputTextarea
@@ -75,7 +75,7 @@
                             }
                             @for(task of $tasks();let j = $index; track j){
                                 @if(task.status === status){
-                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl bg-white px-4 pt-4">
+                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl border bg-white px-4 pt-4">
                                         <div class="flex flex-row gap-2">
                                             @for(tag of task.tags;let k=$index; track k){
                                                 <p-tag styleClass="font-semibold" [rounded]="true" [value]="tag.name"></p-tag>
