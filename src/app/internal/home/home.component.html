@@ -16,10 +16,14 @@
             </div>
             <div class="dot grid grid-cols-4 gap-8">
                 @for(status of taskStatus;let i = $index; track i){
-                    <div class="flex h-full flex-col">
-                        <div class="flex items-center justify-between pb-5">
-                            <h4 class="font-medium">{{ status }}</h4>
-                            <p-button styleClass="text-xl" icon="pi pi-plus" severity="secondary" [rounded]="true" [text]="true" (onClick)="onClickShowAddTask(status)"></p-button>
+                    <div class="my-3 flex h-full flex-col">
+                        <div class="mb-3 flex items-center justify-between  rounded-lg bg-[#f6f7fa] py-1">
+                            <div class="flex flex-row items-center">
+                                <p-button class="text-xl" icon="pi pi-circle" severity="secondary" [styleClass]="taskStatusColor[status]" [rounded]="true" [text]="true"></p-button>
+                                <h4 class="font-medium">{{ status }}</h4>
+                                <p class="ml-5 aspect-square rounded-sm bg-indigo-100 px-2 text-center font-semibold text-indigo-800">{{ getStatusTaskCnt(status) }}</p>
+                            </div>
+                            <p-button class="text-xl" styleClass="text-slate-800" icon="pi pi-plus" severity="secondary"  [rounded]="true" [text]="true" (onClick)="onClickShowAddTask(status)"></p-button>
                         </div>
                         <div class="scrollbar h-[calc(100vh-100px)] overflow-auto rounded-b-2xl">
                             @for(editTask of $editingTasks()|keyvalue;track editTask.key){
@@ -75,13 +79,14 @@
                             }
                             @for(task of $tasks();let j = $index; track j){
                                 @if(task.status === status){
-                                    <div class="mb-5 flex flex-col gap-3 rounded-2xl border bg-white px-4 pt-4">
+                                    <div class="mb-5 flex flex-col rounded-2xl border bg-white p-4">
                                         <div class="flex flex-row gap-2">
                                             @for(tag of task.tags;let k=$index; track k){
                                                 <p-tag styleClass="font-semibold" [rounded]="true" [value]="tag.name"></p-tag>
                                             }
                                         </div>
                                         <p class="text-sm">{{task.description}}</p>
+                                        <p-divider />
                                         <div class="flex items-center justify-between">
                                             <div>
                                                 <div class="flex flex-row items-center justify-center gap-2 text-xs text-slate-400">
@@ -94,14 +99,6 @@
                                                     <p-avatar [style]="avatar.style" [label]="avatar.label" [shape]="avatar.shape"></p-avatar>
                                                 }
                                             </p-avatarGroup>
-                                        </div>
-                                        <div class="flex flex-row items-center justify-end">
-                                            @if(status !== 'Ready'){
-                                                <p-button size="small" icon="pi pi-angle-left" severity="secondary" [rounded]="true" [text]="true"></p-button>
-                                            }
-                                            @if(status !== 'Done'){
-                                                <p-button size="small" icon="pi pi-angle-right" severity="secondary" [rounded]="true" [text]="true"></p-button>
-                                            }
                                         </div>
                                     </div>
                                 }

@@ -56,34 +56,45 @@ import { tags, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/hom
 export class HomeComponent {
   private readonly homeSignalStore = inject(homeSignalStore);
 
+  /** ユーザ */
   $user: Signal<TUser> = this.homeSignalStore.user;
 
+  /** タスク一覧 */
   $tasks: Signal<TTaskData[]> = this.homeSignalStore.tasks;
 
+  /** 編集中のタスク */
   $editingTasks: Signal<TEditingTasks> = this.homeSignalStore.editingTasks;
 
+  /** タグ一覧 */
   tags = tags;
 
+  /** タスクのステータス */
   taskStatus: TTaskStatus[] = [
     'Ready','Progress','Review','Done' 
   ];
 
+  /** タスクのステータスに応じた色を設定する。*/
   taskStatusColor: {[key in TTaskStatus]: string } = {
-    Ready    : '#de89ea',
-    Progress : '#46bd83',
-    Review   : '#07a0f7',
-    Done     : '#f3dff5'
+    Ready    : 'text-slate-400',
+    Progress : 'text-cyan-700',
+    Review   : 'text-amber-600',
+    Done     : 'text-lime-600'
   }
 
-  tmpValue: Date = new Date();
-
+  /**
+   * 修正中のタスクをキャンセルする。
+   * @param taskId 
+   */
   onClickCancelEditingTask = (taskId:number):void => {
     this.homeSignalStore.cancelEditingTask(taskId,this.$editingTasks());
   }
 
-  getMaxNumberEditingTask = (editingTasks:TEditingTasks):number => {
-    return Object.keys(editingTasks).map((key) => parseInt(key)).reduce((a,b) => Math.max(a,b),0);
-  }
+  /**
+   * 与えられたステータスのタスクの数を取得する。
+   * @param taskStatus 
+   * @returns number
+   */
+  getStatusTaskCnt = (taskStatus:TTaskStatus):number => this.$tasks().filter(task => task.status === taskStatus).length;
 
   /**
    * ユニークなIDを生成する。
@@ -94,6 +105,10 @@ export class HomeComponent {
   }
   
 
+  /**
+   * タスクを追加する。
+   * @param taskStatus 
+   */
   onClickShowAddTask = (taskStatus:TTaskStatus) :void => {
     this.homeSignalStore.showAddTask({
       status      : taskStatus,
@@ -109,6 +124,10 @@ export class HomeComponent {
     );
   }
 
+  /**
+   * タスクを保存する。
+   * @param taskId 
+   */
   onClickSaveTask = (taskId:number):void => {
     this.homeSignalStore.saveTask({taskId,tasks: this.$tasks(),editingTasks: this.$editingTasks()});
   }
