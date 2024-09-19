@@ -10,6 +10,7 @@ import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { TabViewModule } from 'primeng/tabview';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 
@@ -33,6 +34,7 @@ import { tags, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/hom
     DividerModule,
     MultiSelectModule,
     ToastModule,
+    TabViewModule
   ],
   animations: [
     // サイドバーのアニメーション
