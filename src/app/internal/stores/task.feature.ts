@@ -43,14 +43,11 @@ export const withTaskMethods = (dexieDB:AppDB) => {
         pipe(
           tap(() => patchState(signalStore,{common: {isLoading: true}})),
           switchMap(async ({taskId,tasks,editingTasks}) => {
-            const maxId = await dexieDB.getTasksMaxId();
-            await dexieDB.addTask({...editingTasks[taskId],id: maxId + 1});
+            await dexieDB.addTask(editingTasks[taskId]);
             patchState(signalStore,{
               editingTasks : deleteObject(editingTasks,taskId),
               tasks        : [
-                {
-                  ...editingTasks[taskId],
-                },
+                editingTasks[taskId],
                 ...tasks.sort((a,b) => a.endDate.getTime() - b.endDate.getTime())
               ]
             })

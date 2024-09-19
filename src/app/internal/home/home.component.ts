@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe, KeyValuePipe } from '@angular/common';
-import { Component, inject, Signal, signal,  WritableSignal } from '@angular/core';
+import { Component, inject, Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
@@ -14,7 +14,7 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 
 import { homeSignalStore } from '../stores/home.signal-store';
-import { tags, TCustomMeterItem, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
+import { tags, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
 
 @Component({
   selector   : 'app-home',
@@ -62,8 +62,6 @@ export class HomeComponent {
 
   $editingTasks: Signal<TEditingTasks> = this.homeSignalStore.editingTasks;
 
-  $isOpenTaskStatusSidebar: WritableSignal<boolean> = signal<boolean>(false);
-
   tags = tags;
 
   taskStatus: TTaskStatus[] = [
@@ -79,50 +77,6 @@ export class HomeComponent {
 
   tmpValue: Date = new Date();
 
-  /**
-   * サイドバーの表示非表示を切り替える。
-   * @returns 
-   */
-  onClickIsOpenTaskStatusSidebar = ():void => this.$isOpenTaskStatusSidebar.update((value) => !value);
-
-  /**
-   * 全てのタスクのステータスの割合を取得する。
-   * @param tasksStatus 
-   * @returns 
-   */
-  getStatusRatio = (tasksStatus: TTaskData[]):TCustomMeterItem[] => {
-    const meterItems : TCustomMeterItem[] = [
-      {label: 'Ready',value: tasksStatus.filter((task) => task.status === 'Ready').length,color: this.taskStatusColor.Ready},
-      {label: 'Progress',value: tasksStatus.filter((task) => task.status === 'Progress').length,color: this.taskStatusColor.Progress},
-      {label: 'Review',value: tasksStatus.filter((task) => task.status === 'Review').length,color: this.taskStatusColor.Review},
-      {label: 'Done',value: tasksStatus.filter((task) => task.status === 'Done').length,color: this.taskStatusColor.Done}
-    ];
-    return meterItems;
-  }
-
-  /**
-   * 適当なカラーコードを生成する。
-   * @returns 
-   */
-  getRandomColor = () : string => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
-
-  /**
-   * タスクが編集中かどうかを判定する。
-   * @param task 
-   * @param editingTasks 
-   * @returns 
-   */
-  includeEditingTask = (task:TTaskData,editingTasks:TEditingTasks):boolean => {
-    return Object.keys(editingTasks).includes(task.id.toString());
-  }
-
   onClickCancelEditingTask = (taskId:number):void => {
     this.homeSignalStore.cancelEditingTask(taskId,this.$editingTasks());
   }
@@ -131,10 +85,19 @@ export class HomeComponent {
     return Object.keys(editingTasks).map((key) => parseInt(key)).reduce((a,b) => Math.max(a,b),0);
   }
 
+  /**
+   * ユニークなIDを生成する。
+   * @returns 
+   */
+  generateRandomId = ():number => {
+    return Math.floor(Math.random() * 1000000000); // 10桁の乱数
+  }
+  
+
   onClickShowAddTask = (taskStatus:TTaskStatus) :void => {
     this.homeSignalStore.showAddTask({
       status      : taskStatus,
-      id          : this.getMaxNumberEditingTask(this.$editingTasks()) + 1, //仮のID
+      id          : this.generateRandomId(),
       title       : '',
       description : '',
       members     : [ this.$user() ],
