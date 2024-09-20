@@ -14,8 +14,8 @@ import { TabViewModule } from 'primeng/tabview';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 
-import { homeSignalStore } from '../stores/home.signal-store';
-import { tags, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../types/home.type';
+import { homeSignalStore } from '../../../stores/home.signal-store';
+import { tags, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../../../types/home.type';
 
 @Component({
   selector   : 'app-home',
@@ -112,9 +112,10 @@ export class HomeComponent {
    * @param taskStatus 
    */
   onClickShowAddTask = (taskStatus:TTaskStatus) :void => {
+    const taskId : number = this.generateRandomId();
     this.homeSignalStore.showAddTask({
       status      : taskStatus,
-      id          : this.generateRandomId(),
+      id          : taskId,
       title       : '',
       description : '',
       members     : [ this.$user() ],

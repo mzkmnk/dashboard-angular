@@ -5,7 +5,7 @@ export type THomeInitialState = {
     isLoading: boolean
   },
   user         : TUser,
-  editingTasks : TEditingTasks
+  editingTasks : TEditingTasks,
   tasks        : TTaskData[],
 }
 

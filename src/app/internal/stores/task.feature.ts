@@ -12,7 +12,6 @@ import { TEditingTasks, TTaskData } from '../types/home.type';
 export const withTaskMethods = (dexieDB:AppDB) => {
   return signalStoreFeature(
     withMethods((signalStore,messageService = inject(MessageService)) => ({
-
       getTasks: rxMethod<undefined>(
         pipe(
           tap(() => patchState(signalStore,{common: {isLoading: true}})),
