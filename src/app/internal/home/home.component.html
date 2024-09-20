@@ -15,7 +15,15 @@
                 </div>
             </div>
             <p-tabView>
-                <p-tabPanel header="Kanban">
+                <p-tabPanel>
+                    <ng-template pTemplate="header">
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-th-large"></i>
+                            <span class="white-space-nowrap m-0 font-bold">
+                                <p>Kanban</p>
+                            </span>
+                        </div>
+                    </ng-template>
                     <div class="dot grid grid-cols-4 gap-8">
                         @for(status of taskStatus;let i = $index; track i){
                             <div class="flex h-full flex-col">
@@ -114,7 +122,15 @@
                         }
                     </div>
                 </p-tabPanel>
-                <p-tabPanel header="Timeline">
+                <p-tabPanel>
+                    <ng-template pTemplate="header">
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-align-right"></i>
+                            <span class="white-space-nowrap m-0 font-bold">
+                                <p>Timeline</p>
+                            </span>
+                        </div>
+                    </ng-template>
                     <h1>Timeline</h1>
                 </p-tabPanel>
             </p-tabView>
