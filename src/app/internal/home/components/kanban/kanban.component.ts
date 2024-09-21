@@ -12,9 +12,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SidebarModule } from 'primeng/sidebar';
 import { TagModule } from 'primeng/tag';
 
-import { homeSignalStore } from '../../../stores/home/home.signal-store';
-import { tags, TEditTasks, TTaskData, TTaskStatus, TUser } from '../../../types/home.type';
-import { AddTaskComponent } from '../add-task/add-task.component';
+import { HomeSignalStore } from '../../../stores/home/home.signal-store';
+import { tags,TTaskData, TTaskStatus, TUser } from '../../../types/home.type';
+import { DetailTaskComponent } from '../detail-task/detail-task.component';
 
 @Component({
   selector   : 'app-kanban',
@@ -33,22 +33,19 @@ import { AddTaskComponent } from '../add-task/add-task.component';
     FormsModule,
     InputTextareaModule,
     SidebarModule,
-    AddTaskComponent
+    DetailTaskComponent
   ],
   templateUrl : './kanban.component.html',
   styleUrl    : './kanban.component.scss'
 })
 export class KanbanComponent {
-  private readonly homeSignalStore = inject(homeSignalStore);
+  private readonly homeSignalStore = inject(HomeSignalStore);
 
   /** ユーザ */
-  $user: Signal<TUser> = this.homeSignalStore.user;
+  $user: Signal<Partial<TUser>> = this.homeSignalStore.user;
 
   /** タスク一覧 */
   $tasks: Signal<TTaskData[]> = this.homeSignalStore.tasks;
-
-  /** 編集中のタスク */
-  $editTasks: Signal<TEditTasks> = this.homeSignalStore.editingTasks;
 
   /** サイドバー */
   $sidebarVisible = signal(false);
@@ -70,14 +67,6 @@ export class KanbanComponent {
   }
 
   /**
-   * 修正中のタスクをキャンセルする。
-   * @param taskId 
-   */
-  onClickCancelEditingTask = (taskId:number):void => {
-    this.homeSignalStore.cancelEditingTask(taskId,this.$editTasks());
-  }
-
-  /**
    * 与えられたステータスのタスクの数を取得する。
    * @param taskStatus 
    * @returns number
@@ -95,36 +84,19 @@ export class KanbanComponent {
   /**
    * サイドバーを表示する。
    */
-  onClickShowSidebar = ():void => this.$sidebarVisible.set(true);
-  
-
-  /**
-   * タスクを追加する。
-   * @param taskStatus 
-   */
-  onClickShowAddTask = (taskStatus:TTaskStatus) :void => {
-    const taskId : number = this.generateRandomId();
-    this.homeSignalStore.addTask({
-      status      : taskStatus,
-      id          : taskId,
-      title       : '',
-      description : '',
-      members     : [ this.$user() ],
-      tags        : [],
-      rangeDate   : [
-        new Date(), 
-        new Date(new Date().setDate(new Date().getDate() + 7)) 
-      ]
-    },
-    this.$editTasks()
+  onClickShowSidebar = (status:TTaskStatus):void => { 
+    this.$sidebarVisible.set(true);
+    this.homeSignalStore.addDetailTask(
+      {
+        id          : this.generateRandomId(),
+        status,
+        title       : '',
+        description : '',
+        members     : [],
+        tags        : [],
+        startDate   : new Date(),
+        endDate     : new Date()
+      }
     );
-  }
-
-  /**
-   * タスクを保存する。
-   * @param taskId 
-   */
-  onClickSaveTask = (taskId:number):void => {
-    this.homeSignalStore.saveTask({taskId,tasks: this.$tasks(),editTasks: this.$editTasks()});
   }
 }

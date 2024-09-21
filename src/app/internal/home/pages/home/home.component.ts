@@ -6,7 +6,7 @@ import { AvatarModule } from 'primeng/avatar';
 import {TabViewModule  } from 'primeng/tabview';
 import { ToastModule  } from 'primeng/toast';
 
-import { homeSignalStore } from '../../../stores/home/home.signal-store';
+import { HomeSignalStore } from '../../../stores/home/home.signal-store';
 import { TUser } from '../../../types/home.type';
 import { KanbanComponent } from '../../components/kanban/kanban.component';
 import { TimelineComponent } from '../../components/timeline/timeline.component';
@@ -44,8 +44,8 @@ import { TimelineComponent } from '../../components/timeline/timeline.component'
   styleUrl    : './home.component.scss'
 })
 export class HomeComponent {
-  private readonly homeSignalStore = inject(homeSignalStore);
+  private readonly homeSignalStore = inject(HomeSignalStore);
 
   /** ユーザ */
-  $user: Signal<TUser> = this.homeSignalStore.user;
+  $user: Signal<Partial<TUser>> = this.homeSignalStore.user;
 }

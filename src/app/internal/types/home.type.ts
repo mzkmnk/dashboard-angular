@@ -4,9 +4,9 @@ export type THomeInitialState = {
   common : {
     isLoading: boolean
   },
-  user         : TUser,
-  editingTasks : TEditTasks,
-  tasks        : TTaskData[],
+  user       : Partial<TUser>,
+  detailTask : Partial<TTaskData>,
+  tasks      : TTaskData[],
 }
 
 
@@ -40,10 +40,6 @@ export type TTaskData = {
   startDate   : Date,
   endDate     : Date
 }
-
-
-export type TEditTask = Omit<TTaskData,'startDate'|'endDate'> & { rangeDate: Date[] };
-export type TEditTasks = Record<number,TEditTask>;
 
 export type TTag = {
   name : string,
