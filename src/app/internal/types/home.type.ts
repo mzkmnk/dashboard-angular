@@ -67,8 +67,24 @@ export const tags:TTag[] = [
 
 /** タスクのステータスに応じた色を設定する。*/
 export const taskStatusColor: {[key in TTaskStatus]: string } = {
-  Ready    : 'text-slate-400',
-  Progress : 'text-cyan-700',
-  Review   : 'text-amber-600',
-  Done     : 'text-lime-600'
+  Ready    : 'border-slate-400 inline-block rounded-[50%] border-2 text-center',
+  Progress : 'border-cyan-500 inline-block rounded-[50%] border-2 text-center',
+  Review   : 'border-amber-500 inline-block rounded-[50%] border-2 text-center',
+  Done     : 'border-lime-500 inline-block rounded-[50%] border-2 text-center'
 }
+
+export const typeGuard = {
+  isTTaskData(obj: Partial<TTaskData> ):obj is TTaskData{
+    return (
+      obj && 
+      typeof obj.id === 'number' &&
+      typeof obj.status === 'string' &&
+      typeof obj.title === 'string' &&
+      typeof obj.description === 'string' &&
+      Array.isArray(obj.members) &&
+      Array.isArray(obj.tags) &&
+      obj.startDate instanceof Date &&
+      obj.endDate instanceof Date
+    )
+  },
+} as const;

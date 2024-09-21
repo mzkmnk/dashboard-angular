@@ -1,4 +1,12 @@
-<p-sidebar position="right" styleClass="rounded-xl w-[40%] h-[98%] mt-3 mr-3 h-5/6" [(visible)]="$sidebarVisible" (onHide)="onHideSidebar()">
+<p-sidebar position="right" styleClass="rounded-xl w-[40%] h-[98%] mt-3 mr-3 h-5/6" [dismissible]="!$editMode()" [showCloseIcon]="!$editMode()" [(visible)]="$sidebarVisible" (onHide)="onHideSidebar()">
+    <ng-template pTemplate="header">
+            <div class="flex w-full flex-row justify-end gap-4">
+                @if($editMode()){
+                <p-button label="Save" (onClick)="onClickSaveTask()"></p-button>
+                <p-button label="Cancel" [outlined]="true" (onClick)="closeSidebar()"></p-button>
+            }
+            </div>
+    </ng-template>
     <div class="flex flex-col gap-7">
         <div class="flex flex-row gap-3">
             <div class="flex w-36 flex-row items-center gap-2">
@@ -16,7 +24,8 @@
                 <p class="text-slate-500">Status</p>
             </div>
             <div class="flex flex-1 flex-row items-center gap-2">
-                <i class="pi pi-circle text-xl" [class]="taskStatusColor[$detailTask().status ?? 'Progress']"></i>
+                <!-- <i class="pi pi-circle text-xl" [class]="taskStatusColor[$detailTask().status ?? 'Progress']"></i> -->
+                <p class="h-[1.5rem] w-[1.5rem]" [class]="taskStatusColor[$detailTask().status ?? 'Progress']"></p>
                 <p class="font-medium">{{ $detailTask().status }}</p>
             </div>
         </div>

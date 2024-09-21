@@ -13,7 +13,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TagModule } from 'primeng/tag';
 
 import { HomeSignalStore } from '../../../stores/home/home.signal-store';
-import {taskStatusColor,TTaskData, TTaskStatus, TUser } from '../../../types/home.type';
+import {taskStatusColor,TTaskData, TTaskStatus, TUser, typeGuard } from '../../../types/home.type';
 import { DetailTaskComponent } from '../detail-task/detail-task.component';
 
 @Component({
@@ -51,6 +51,9 @@ export class KanbanComponent {
   /** サイドバー */
   $sidebarVisible = signal(false);
 
+  /** 編集モードかどうか */
+  $editMode = signal(false);
+
   /** タスクのステータス */
   taskStatus: TTaskStatus[] = [
     'Ready','Progress','Review','Done' 
@@ -79,7 +82,10 @@ export class KanbanComponent {
    */
   onClickShowSidebar = (status:TTaskStatus,task:Partial<TTaskData>):void => { 
     console.log(status,task);
+    console.log(!typeGuard.isTTaskData(task));
     this.$sidebarVisible.set(true);
+    this.$editMode.set(!typeGuard.isTTaskData(task));
+    console.log(this.$editMode());
     this.homeSignalStore.addDetailTask({
       id          : this.generateRandomId(),
       status,
@@ -92,10 +98,3 @@ export class KanbanComponent {
     });
   }
 }
-
-/**
- * @description オブジェクトが完全なオブジェクトかどうかを判定する。
- * @param obj 
- * @returns 
- */
-export const isComplete = <T extends object>(obj:Partial<T>):obj is T => Object.keys(obj).length === Object.keys({} as T).length;

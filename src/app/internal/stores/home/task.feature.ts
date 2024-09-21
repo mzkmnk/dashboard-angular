@@ -9,7 +9,8 @@ import { TTaskData } from '../../types/home.type';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const withTaskMethods = (dexieDB:AppDB) => {
   return signalStoreFeature(
-    withMethods((signalStore, ) => ({
+    withMethods((signalStore) => ({
+
       getTasks: rxMethod<undefined>(
         pipe(
           tap(() => patchState(signalStore,{common: {isLoading: true}})),
@@ -31,9 +32,35 @@ export const withTaskMethods = (dexieDB:AppDB) => {
         pipe(
           tap(() => patchState(signalStore,{detailTask: {}}))
         )
+      ),
+
+      saveDetailTask: rxMethod<{ detailTask: TTaskData,tasks: TTaskData[] }>(
+        pipe(
+          switchMap(async ({detailTask,tasks}) => {
+            let isEdit = false;
+            let saveTasks = tasks.map((t) => {
+              if(t.id === detailTask.id){
+                isEdit = true;
+              }
+              return t.id === detailTask.id
+                ? detailTask
+                : t 
+            }
+            );
+            if(!isEdit){
+              saveTasks = [
+                detailTask,...tasks
+              ];
+            }
+            await dexieDB.saveTask(detailTask);
+            patchState(signalStore,{
+              tasks      : saveTasks,
+              detailTask : {}
+            })
+          }),
+        )
       )
     }
-
     )),
   )
 }

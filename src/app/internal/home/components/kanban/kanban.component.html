@@ -1,10 +1,10 @@
-<app-detail-task [($sidebarVisible)]="$sidebarVisible"></app-detail-task>
+<app-detail-task [($sidebarVisible)]="$sidebarVisible" [($editMode)]="$editMode"></app-detail-task>
 <div class="dot grid grid-cols-4 gap-8">
     @for(status of taskStatus;let i = $index; track i){
         <div class="flex h-full flex-col">
             <div class="mb-3 flex items-center justify-between  rounded-lg bg-[#f6f7fa] py-1 pl-2">
                 <div class="flex flex-row items-center">
-                    <i class="pi pi-circle text-xl" [class]="taskStatusColor[status]"></i>
+                    <p class="h-[1.5rem] w-[1.5rem]" [class]="taskStatusColor[status]"></p>
                     <h4 class="ml-3 font-medium">{{ status }}</h4>
                     <p class="ml-5 aspect-square rounded-sm bg-indigo-100 px-2 text-center font-semibold text-indigo-800">{{ getStatusTaskCnt(status) }}</p>
                 </div>

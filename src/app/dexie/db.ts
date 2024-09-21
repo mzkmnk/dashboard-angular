@@ -48,7 +48,7 @@ export class AppDB extends Dexie {
    * タスクを追加する。
    * @param task タスクデータ
    */
-  addTask = async (task:TTaskData) : Promise<number> => {
+  saveTask = async (task:TTaskData) : Promise<number> => {
     return await DB.tasks.add(task);
   }
 }
