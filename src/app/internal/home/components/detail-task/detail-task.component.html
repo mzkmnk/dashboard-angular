@@ -1,11 +1,15 @@
 <p-sidebar position="right" styleClass="rounded-xl w-[40%] h-[98%] mt-3 mr-3 h-5/6" [dismissible]="!$editMode()" [showCloseIcon]="!$editMode()" [(visible)]="$sidebarVisible" (onHide)="onHideSidebar()">
     <ng-template pTemplate="header">
+        @if($editMode()){
             <div class="flex w-full flex-row justify-end gap-4">
-                @if($editMode()){
                 <p-button label="Save" (onClick)="onClickSaveTask()"></p-button>
-                <p-button label="Cancel" [outlined]="true" (onClick)="closeSidebar()"></p-button>
-            }
+                <p-button label="Cancel" [outlined]="true" (onClick)="onClickCloseSidebar()"></p-button>
             </div>
+        }@else {
+            <div class="flex">
+                <p-button icon="pi pi-pen-to-square" class=" text-2xl text-slate-800" severity="secondary"  [rounded]="true" [text]="true" (onClick)="onClickEditMode()"></p-button>
+            </div>
+        }
     </ng-template>
     <div class="flex flex-col gap-7">
         <div class="flex flex-row gap-3">
@@ -14,7 +18,11 @@
                 <p class="text-slate-500">Title</p>
             </div>
             <div class="flex flex-1 flex-row items-center">
-                <input pInputText placeholder="Task Name" class="w-full text-xl" [(ngModel)]="$detailTask().title" />
+                @if($editMode()){
+                    <input pInputText placeholder="Task Name" class="w-full text-xl" [(ngModel)]="$detailTask().title" />
+                }@else {
+                    <h2 class="text-xl font-medium">{{ $detailTask().title?.length !== 0 ? $detailTask().title: 'No Title Data' }}</h2>
+                }
             </div>
         </div>
 
@@ -36,9 +44,15 @@
                 <p class="text-slate-500">Due Date</p>
             </div>
             <div class="flex flex-1 flex-row items-center gap-3">
-                <p-calendar appendTo="body" [readonlyInput]="true" [(ngModel)]="$detailTask().startDate"></p-calendar>
-                <p class="text-xl">〜</p>
-                <p-calendar appendTo="body" [readonlyInput]="true" [(ngModel)]="$detailTask().endDate"></p-calendar>
+                @if($editMode()){
+                    <p-calendar appendTo="body" [readonlyInput]="true" [(ngModel)]="$detailTask().startDate"></p-calendar>
+                    <p class="text-xl">〜</p>
+                    <p-calendar appendTo="body" [readonlyInput]="true" [(ngModel)]="$detailTask().endDate"></p-calendar>
+                }@else {
+                    <p class="text-lg font-medium">{{ $detailTask().startDate | date:'dd MMM yyyy' }}</p>
+                    <p class="text-xl">〜</p>
+                    <p class="text-lg font-medium">{{ $detailTask().endDate | date:'dd MMM yyyy' }}</p>
+                }
             </div>
         </div>
 
@@ -48,7 +62,19 @@
                 <p class="text-slate-500">Tags</p>
             </div>
             <div class="flex flex-1 flex-row items-center">
-                <p-multiSelect class="w-full" styleClass="w-full" optionLabel="name" [options]="tags" [(ngModel)]="$detailTask().tags"></p-multiSelect>
+                @if($editMode()){
+                    <p-multiSelect class="w-full" styleClass="w-full" optionLabel="name" [options]="tags" [(ngModel)]="$detailTask().tags"></p-multiSelect>
+                }@else {
+                    @if(($detailTask().tags?? []).length > 0){
+                        <div class="flex flex-row gap-4">
+                            @for(tag of $detailTask().tags; let i = $index; track i){
+                                <p-tag styleClass="px-3 py-1" [value]="tag.name"></p-tag>
+                            }
+                        </div>
+                    }@else {
+                        <p-tag styleClass="font-semibold px-3 py-1" value="No Tags" severity="secondary"></p-tag>
+                    }
+                }
             </div>
         </div>
 
@@ -74,14 +100,23 @@
                 <i class="pi pi-book text-xl text-slate-400"></i>
                 <p class="text-slate-500">Description</p>
             </div>
-            <textarea 
-                class="w-full text-base"
-                style="resize: none;"
-                rows="5"
-                cols="30" 
-                pInputTextarea 
-                [(ngModel)]="$detailTask().description">
-            </textarea>
+            @if($editMode()){
+                <textarea 
+                    class="w-full text-base"
+                    rows="5"
+                    cols="30" 
+                    pInputTextarea 
+                    [(ngModel)]="$detailTask().description">
+                </textarea>
+            }@else{
+                <textarea 
+                    class="w-full text-base"
+                    style="resize: none;"
+                    pInputTextarea 
+                    [readOnly]="true"
+                    [(ngModel)]="$detailTask().description">
+                </textarea>
+            }
         </div>
         
         <p-tabView>
@@ -92,7 +127,7 @@
                     </div>
                 </ng-template>
                 <div>
-                    <h2>Comming Soon : Sub Tasks</h2>
+                    <p>Comming Soon : Sub Tasks</p>
                 </div>
             </p-tabPanel>
             <p-tabPanel>
@@ -102,7 +137,7 @@
                     </div>
                 </ng-template>
                 <div>
-                    <h2>Comming Soon : Comments</h2>
+                    <p>Comming Soon : Comments</p>
                 </div>
             </p-tabPanel>
         </p-tabView>

@@ -37,25 +37,18 @@ export const withTaskMethods = (dexieDB:AppDB) => {
       saveDetailTask: rxMethod<{ detailTask: TTaskData,tasks: TTaskData[] }>(
         pipe(
           switchMap(async ({detailTask,tasks}) => {
-            let isEdit = false;
-            let saveTasks = tasks.map((t) => {
-              if(t.id === detailTask.id){
-                isEdit = true;
-              }
-              return t.id === detailTask.id
+            const isEdit = tasks.some(t => t.id === detailTask.id);
+            const saveTasks = isEdit
+              ? tasks.map(t => t.id === detailTask.id
                 ? detailTask
-                : t 
-            }
-            );
-            if(!isEdit){
-              saveTasks = [
-                detailTask,...tasks
+                : t)
+              : [
+                detailTask,
+                ...tasks
               ];
-            }
-            await dexieDB.saveTask(detailTask);
+            await dexieDB.saveTask(detailTask,isEdit);
             patchState(signalStore,{
-              tasks      : saveTasks,
-              detailTask : {}
+              tasks: saveTasks,
             })
           }),
         )

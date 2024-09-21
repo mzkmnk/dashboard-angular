@@ -86,15 +86,17 @@ export class KanbanComponent {
     this.$sidebarVisible.set(true);
     this.$editMode.set(!typeGuard.isTTaskData(task));
     console.log(this.$editMode());
-    this.homeSignalStore.addDetailTask({
-      id          : this.generateRandomId(),
-      status,
-      title       : '',
-      description : '',
-      members     : [],
-      tags        : [],
-      startDate   : new Date(),
-      endDate     : new Date(new Date().setDate(new Date().getDate()+7))
-    });
+    this.homeSignalStore.addDetailTask(typeGuard.isTTaskData(task)
+      ? task
+      : {
+        id          : this.generateRandomId(),
+        status,
+        title       : '',
+        description : '',
+        members     : [],
+        tags        : [],
+        startDate   : new Date(),
+        endDate     : new Date(new Date().setDate(new Date().getDate()+7))
+      });
   }
 }

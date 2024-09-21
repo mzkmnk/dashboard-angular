@@ -9,6 +9,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SidebarModule } from 'primeng/sidebar';
 import { TabViewModule } from 'primeng/tabview';
+import { TagModule } from 'primeng/tag';
 
 import { HomeSignalStore } from '../../../stores/home/home.signal-store';
 import { tags, taskStatusColor, typeGuard } from '../../../types/home.type';
@@ -25,7 +26,8 @@ import { tags, taskStatusColor, typeGuard } from '../../../types/home.type';
     ChipModule,
     InputTextareaModule,
     TabViewModule,
-    ButtonModule
+    ButtonModule,
+    TagModule
   ],
   templateUrl : './detail-task.component.html',
   styleUrl    : './detail-task.component.scss',
@@ -45,6 +47,8 @@ export class DetailTaskComponent {
   /** 編集モードかどうか */
   $editMode = model(false);
 
+  $isClickEditMode = model(false);
+
   /** タグ一覧 */
   tags = tags;
 
@@ -55,14 +59,28 @@ export class DetailTaskComponent {
   onHideSidebar = ():void => { this.homeSignalStore.delDetailTask(undefined) }
 
   /** サイドバーを閉じる関数 */
-  closeSidebar = ():void => { this.$sidebarVisible.set(false) }
+  onClickCloseSidebar = ():void => {
+    if(this.$isClickEditMode()){
+      this.$isClickEditMode.set(false);
+      return
+    }
+    this.$sidebarVisible.set(false);
+  }
 
+  /** 編集モード */
+  onClickEditMode = ():void => {
+    this.$editMode.update((v) => !v);
+    this.$isClickEditMode.set(true);
+  }
+
+  /** 編集したタスクを保存する */
   onClickSaveTask = ():void => {
     const detailTask = this.$detailTask();
     console.log(typeGuard.isTTaskData(detailTask))
-    if(typeGuard.isTTaskData(detailTask)){
-      this.homeSignalStore.saveDetailTask({detailTask,tasks: this.homeSignalStore.tasks()})
-      this.closeSidebar();
+    if(!typeGuard.isTTaskData(detailTask)){
+      return
     }
+    this.homeSignalStore.saveDetailTask({detailTask,tasks: this.homeSignalStore.tasks()})
+    this.onClickEditMode();
   }
 }
