@@ -4,16 +4,16 @@
         <div class="flex h-full flex-col">
             <div class="mb-3 flex items-center justify-between  rounded-lg bg-[#f6f7fa] py-1 pl-2">
                 <div class="flex flex-row items-center">
-                    <i class="pi pi-circle text-xl" [class]=" taskStatusColor[status]"></i>
+                    <i class="pi pi-circle text-xl" [class]="taskStatusColor[status]"></i>
                     <h4 class="ml-3 font-medium">{{ status }}</h4>
                     <p class="ml-5 aspect-square rounded-sm bg-indigo-100 px-2 text-center font-semibold text-indigo-800">{{ getStatusTaskCnt(status) }}</p>
                 </div>
-                <p-button class="text-xl" styleClass="text-slate-800" icon="pi pi-plus" severity="secondary"  [rounded]="true" [text]="true" (onClick)="onClickShowSidebar(status)"></p-button>
+                <p-button class="text-xl" styleClass="text-slate-800" icon="pi pi-plus" severity="secondary"  [rounded]="true" [text]="true" (onClick)="onClickShowSidebar(status,{})"></p-button>
             </div>
             <div class="scrollbar h-[calc(100vh-165px)] overflow-auto rounded-b-2xl">
                 @for(task of $tasks();let j = $index; track j){
                     @if(task.status === status){
-                        <div class="mb-5 flex flex-col  rounded-md border bg-white p-4 shadow-sm">
+                        <div class="mb-5 flex flex-col  rounded-md border bg-white p-4 shadow-sm" (click)="onClickShowSidebar(status,task)">
                             <div class="mb-2 flex flex-row gap-2">
                                 @if(task.tags.length === 0){
                                     <p-tag styleClass="font-semibold" value="No Tags" severity="secondary"></p-tag>

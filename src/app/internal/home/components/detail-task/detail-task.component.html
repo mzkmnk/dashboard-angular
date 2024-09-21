@@ -1,3 +1,101 @@
 <p-sidebar position="right" styleClass="rounded-xl w-[40%] h-[98%] mt-3 mr-3 h-5/6" [(visible)]="$sidebarVisible" (onHide)="onHideSidebar()">
-    
+    <div class="flex flex-col gap-7">
+        <div class="flex flex-row gap-3">
+            <div class="flex w-36 flex-row items-center gap-2">
+                <i class="pi pi-circle text-xl text-slate-400"></i>
+                <p class="text-slate-500">Title</p>
+            </div>
+            <div class="flex flex-1 flex-row items-center">
+                <input pInputText placeholder="Task Name" class="w-full text-xl" [(ngModel)]="$detailTask().title" />
+            </div>
+        </div>
+
+        <div class="flex flex-row items-center gap-3">
+            <div class="flex w-36 flex-row items-center gap-2">
+                <i class="pi pi-bullseye text-xl text-slate-400"></i>
+                <p class="text-slate-500">Status</p>
+            </div>
+            <div class="flex flex-1 flex-row items-center gap-2">
+                <i class="pi pi-circle text-xl" [class]="taskStatusColor[$detailTask().status ?? 'Progress']"></i>
+                <p class="font-medium">{{ $detailTask().status }}</p>
+            </div>
+        </div>
+
+        <div class="flex flex-row items-center gap-3">
+            <div class="flex w-36 flex-row items-center gap-2">
+                <i class="pi pi-calendar text-xl text-slate-400"></i>
+                <p class="text-slate-500">Due Date</p>
+            </div>
+            <div class="flex flex-1 flex-row items-center gap-3">
+                <p-calendar appendTo="body" [readonlyInput]="true" [(ngModel)]="$detailTask().startDate"></p-calendar>
+                <p class="text-xl">〜</p>
+                <p-calendar appendTo="body" [readonlyInput]="true" [(ngModel)]="$detailTask().endDate"></p-calendar>
+            </div>
+        </div>
+
+        <div class="flex flex-row items-center gap-3">
+            <div class="flex w-36 flex-row items-center gap-2">
+                <i class="pi pi-tag text-xl text-slate-400"></i>
+                <p class="text-slate-500">Tags</p>
+            </div>
+            <div class="flex flex-1 flex-row items-center">
+                <p-multiSelect class="w-full" styleClass="w-full" optionLabel="name" [options]="tags" [(ngModel)]="$detailTask().tags"></p-multiSelect>
+            </div>
+        </div>
+
+        <div class="flex flex-row items-center gap-3">
+            <div class="flex w-36 flex-row items-center gap-2">
+                <i class="pi pi-users text-xl text-slate-400"></i>
+                <p class="text-slate-500">Assignee</p>
+            </div>
+            <div class="flex flex-1 flex-row items-center">
+                <p-chip styleClass="pl-0 pr-3">
+                    <span class="flex h-[2rem] w-[2rem] items-center justify-center rounded-full bg-indigo-300">
+                        {{ $user().label }}
+                    </span>
+                    <span class="ml-1 font-medium">
+                        {{ $user().username }}
+                    </span>
+                </p-chip>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-start gap-3">
+            <div class="flex flex-row items-center gap-2">
+                <i class="pi pi-book text-xl text-slate-400"></i>
+                <p class="text-slate-500">Description</p>
+            </div>
+            <textarea 
+                class="w-full text-base"
+                style="resize: none;"
+                rows="5"
+                cols="30" 
+                pInputTextarea 
+                [(ngModel)]="$detailTask().description">
+            </textarea>
+        </div>
+        
+        <p-tabView>
+            <p-tabPanel>
+                <ng-template pTemplate="header">
+                    <div class="flex items-center gap-2">
+                        <p>SubTasks</p>
+                    </div>
+                </ng-template>
+                <div>
+                    <h2>Comming Soon : Sub Tasks</h2>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel>
+                <ng-template pTemplate="header">
+                    <div class="flex items-center gap-2">
+                        <p>Comments</p>
+                    </div>
+                </ng-template>
+                <div>
+                    <h2>Comming Soon : Comments</h2>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
 </p-sidebar>

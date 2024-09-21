@@ -13,7 +13,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TagModule } from 'primeng/tag';
 
 import { HomeSignalStore } from '../../../stores/home/home.signal-store';
-import { tags,TTaskData, TTaskStatus, TUser } from '../../../types/home.type';
+import {taskStatusColor,TTaskData, TTaskStatus, TUser } from '../../../types/home.type';
 import { DetailTaskComponent } from '../detail-task/detail-task.component';
 
 @Component({
@@ -33,7 +33,8 @@ import { DetailTaskComponent } from '../detail-task/detail-task.component';
     FormsModule,
     InputTextareaModule,
     SidebarModule,
-    DetailTaskComponent
+    DetailTaskComponent,
+    MultiSelectModule,
   ],
   templateUrl : './kanban.component.html',
   styleUrl    : './kanban.component.scss'
@@ -50,21 +51,13 @@ export class KanbanComponent {
   /** サイドバー */
   $sidebarVisible = signal(false);
 
-  /** タグ一覧 */
-  tags = tags;
-
   /** タスクのステータス */
   taskStatus: TTaskStatus[] = [
     'Ready','Progress','Review','Done' 
   ];
 
   /** タスクのステータスに応じた色を設定する。*/
-  taskStatusColor: {[key in TTaskStatus]: string } = {
-    Ready    : 'text-slate-400',
-    Progress : 'text-cyan-700',
-    Review   : 'text-amber-600',
-    Done     : 'text-lime-600'
-  }
+  taskStatusColor = taskStatusColor
 
   /**
    * 与えられたステータスのタスクの数を取得する。
@@ -84,19 +77,25 @@ export class KanbanComponent {
   /**
    * サイドバーを表示する。
    */
-  onClickShowSidebar = (status:TTaskStatus):void => { 
+  onClickShowSidebar = (status:TTaskStatus,task:Partial<TTaskData>):void => { 
+    console.log(status,task);
     this.$sidebarVisible.set(true);
-    this.homeSignalStore.addDetailTask(
-      {
-        id          : this.generateRandomId(),
-        status,
-        title       : '',
-        description : '',
-        members     : [],
-        tags        : [],
-        startDate   : new Date(),
-        endDate     : new Date()
-      }
-    );
+    this.homeSignalStore.addDetailTask({
+      id          : this.generateRandomId(),
+      status,
+      title       : '',
+      description : '',
+      members     : [],
+      tags        : [],
+      startDate   : new Date(),
+      endDate     : new Date(new Date().setDate(new Date().getDate()+7))
+    });
   }
 }
+
+/**
+ * @description オブジェクトが完全なオブジェクトかどうかを判定する。
+ * @param obj 
+ * @returns 
+ */
+export const isComplete = <T extends object>(obj:Partial<T>):obj is T => Object.keys(obj).length === Object.keys({} as T).length;

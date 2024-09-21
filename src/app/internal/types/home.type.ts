@@ -64,3 +64,11 @@ export const tags:TTag[] = [
     code : 'UX'
   }
 ];
+
+/** タスクのステータスに応じた色を設定する。*/
+export const taskStatusColor: {[key in TTaskStatus]: string } = {
+  Ready    : 'text-slate-400',
+  Progress : 'text-cyan-700',
+  Review   : 'text-amber-600',
+  Done     : 'text-lime-600'
+}
