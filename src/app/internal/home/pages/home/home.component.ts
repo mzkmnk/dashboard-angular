@@ -15,7 +15,7 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 
 import { homeSignalStore } from '../../../stores/home.signal-store';
-import { tags, TEditingTasks, TTaskData, TTaskStatus, TUser } from '../../../types/home.type';
+import { tags, TEditTasks, TTaskData, TTaskStatus, TUser } from '../../../types/home.type';
 
 @Component({
   selector   : 'app-home',
@@ -65,7 +65,7 @@ export class HomeComponent {
   $tasks: Signal<TTaskData[]> = this.homeSignalStore.tasks;
 
   /** 編集中のタスク */
-  $editingTasks: Signal<TEditingTasks> = this.homeSignalStore.editingTasks;
+  $editTasks: Signal<TEditTasks> = this.homeSignalStore.editingTasks;
 
   /** タグ一覧 */
   tags = tags;
@@ -88,7 +88,7 @@ export class HomeComponent {
    * @param taskId 
    */
   onClickCancelEditingTask = (taskId:number):void => {
-    this.homeSignalStore.cancelEditingTask(taskId,this.$editingTasks());
+    this.homeSignalStore.cancelEditingTask(taskId,this.$editTasks());
   }
 
   /**
@@ -113,17 +113,19 @@ export class HomeComponent {
    */
   onClickShowAddTask = (taskStatus:TTaskStatus) :void => {
     const taskId : number = this.generateRandomId();
-    this.homeSignalStore.showAddTask({
+    this.homeSignalStore.addTask({
       status      : taskStatus,
       id          : taskId,
       title       : '',
       description : '',
       members     : [ this.$user() ],
       tags        : [],
-      startDate   : new Date(),
-      endDate     : new Date(new Date().setDate(new Date().getDate() + 7)),
+      rangeDate   : [
+        new Date(), 
+        new Date(new Date().setDate(new Date().getDate() + 7)) 
+      ]
     },
-    this.$editingTasks()
+    this.$editTasks()
     );
   }
 
@@ -132,6 +134,6 @@ export class HomeComponent {
    * @param taskId 
    */
   onClickSaveTask = (taskId:number):void => {
-    this.homeSignalStore.saveTask({taskId,tasks: this.$tasks(),editingTasks: this.$editingTasks()});
+    this.homeSignalStore.saveTask({taskId,tasks: this.$tasks(),editTasks: this.$editTasks()});
   }
 }

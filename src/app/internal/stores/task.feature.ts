@@ -5,7 +5,7 @@ import { MessageService } from 'primeng/api';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import { AppDB } from '../../dexie/db';
-import { TEditingTasks, TTaskData } from '../types/home.type';
+import { TEditTask, TEditTasks, TTaskData } from '../types/home.type';
 
 // todo 関数の戻り値の型を定義する
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -23,30 +23,41 @@ export const withTaskMethods = (dexieDB:AppDB) => {
         )
       ),
 
-      showAddTask(task:TTaskData,editingTasks:TEditingTasks):void {
+      addTask(editTask:TEditTask,editTasks:TEditTasks):void {
         patchState(signalStore,{
           editingTasks: {
-            [task.id]: task,
-            ...editingTasks
+            [editTask.id]: editTask,
+            ...editTasks
           }
         });
       },
 
-      cancelEditingTask(taskId:number,editingTasks:TEditingTasks):void {
+      cancelEditingTask(taskId:number,editingTasks:TEditTasks):void {
         patchState(signalStore,{
           editingTasks: deleteObject(editingTasks,taskId),
         })
       },
 
-      saveTask: rxMethod<{ taskId: number,tasks: TTaskData[],editingTasks: TEditingTasks }>(
+      saveTask: rxMethod<{ taskId: number,tasks: TTaskData[],editTasks: TEditTasks }>(
         pipe(
           tap(() => patchState(signalStore,{common: {isLoading: true}})),
-          switchMap(async ({taskId,tasks,editingTasks}) => {
-            await dexieDB.addTask(editingTasks[taskId]);
+          switchMap(async ({taskId,tasks,editTasks}) => {
+            const {rangeDate,...taskData} = editTasks[taskId];
+            await dexieDB.addTask(
+              {
+                ...taskData,
+                startDate : rangeDate[0],
+                endDate   : rangeDate[1]
+              }
+            );
             patchState(signalStore,{
-              editingTasks : deleteObject(editingTasks,taskId),
+              editingTasks : deleteObject(editTasks,taskId),
               tasks        : [
-                editingTasks[taskId],
+                {
+                  ...taskData,
+                  startDate : rangeDate[0],
+                  endDate   : rangeDate[1]
+                },
                 ...tasks.sort((a,b) => a.endDate.getTime() - b.endDate.getTime())
               ]
             })

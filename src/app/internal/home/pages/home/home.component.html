@@ -36,7 +36,7 @@
                                     <p-button class="text-xl" styleClass="text-slate-800" icon="pi pi-plus" severity="secondary"  [rounded]="true" [text]="true" (onClick)="onClickShowAddTask(status)"></p-button>
                                 </div>
                                 <div class="scrollbar h-[calc(100vh-165px)] overflow-auto rounded-b-2xl">
-                                    @for(editTask of $editingTasks()|keyvalue;track editTask.value.id){
+                                    @for(editTask of $editTasks()|keyvalue;track editTask.value.id){
                                         @if(editTask.value.status === status){
                                             <div class="mb-5 flex flex-col gap-3 rounded-2xl border bg-white px-4 pt-4 shadow-sm">
                                                 <textarea
@@ -59,17 +59,11 @@
                                                 </div>
                                                 <p-divider />
                                                 <div class="flex flex-row items-center justify-between gap-2">
-                                                    <div class="flex w-full flex-row items-center justify-center gap-2 text-slate-400">
+                                                    <div class="flex w-full flex-row items-center justify-center text-slate-400">
                                                         <p-floatLabel class="w-full">
-                                                            <p-calendar class="w-full" styleClass="w-full" appendTo="body"   [(ngModel)]="editTask.value.startDate" />
-                                                            <label for="endDate">Start Date</label>
+                                                            <p-calendar class="w-full" styleClass="w-full" selectionMode="range" appendTo="body"  [readonlyInput]="true"   [(ngModel)]="editTask.value.rangeDate" />
+                                                            <label for="schedule">schedule</label>
                                                         </p-floatLabel>   
-                                                    </div>
-                                                    <div class="flex w-full flex-row items-center justify-center gap-2 text-slate-400">
-                                                        <p-floatLabel class="w-full">
-                                                            <p-calendar class="w-full" styleClass="w-full" appendTo="body"   [(ngModel)]="editTask.value.endDate" />
-                                                            <label for="endDate">End Date</label>
-                                                        </p-floatLabel>    
                                                     </div>
                                                 </div>
                                                 <div class="flex flex-row items-center justify-end gap-2 pb-2">
@@ -89,7 +83,7 @@
                                     }
                                     @for(task of $tasks();let j = $index; track j){
                                         @if(task.status === status){
-                                            <div class="mb-5 flex flex-col rounded-2xl border bg-white p-4 shadow-sm">
+                                            <div class="mb-5 flex flex-col rounded-md border bg-white p-4 shadow-sm">
                                                 <div class="mb-2 flex flex-row gap-2">
                                                     @if(task.tags.length === 0){
                                                         <p-tag styleClass="font-semibold" value="No Tags" severity="secondary"></p-tag>

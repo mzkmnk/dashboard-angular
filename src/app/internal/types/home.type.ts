@@ -5,9 +5,10 @@ export type THomeInitialState = {
     isLoading: boolean
   },
   user         : TUser,
-  editingTasks : TEditingTasks,
+  editingTasks : TEditTasks,
   tasks        : TTaskData[],
 }
+
 
 export type TUser = {
   id       : number,
@@ -40,7 +41,9 @@ export type TTaskData = {
   endDate     : Date
 }
 
-export type TEditingTasks = Record<number,TTaskData>;
+
+export type TEditTask = Omit<TTaskData,'startDate'|'endDate'> & { rangeDate: Date[] };
+export type TEditTasks = Record<number,TEditTask>;
 
 export type TTag = {
   name : string,
@@ -50,7 +53,7 @@ export type TTag = {
 export const tags:TTag[] = [
   {
     name : 'Frontend',
-    code : 'Frontend'
+    code : 'Frontend',
   },
   {
     name : 'Backend',
