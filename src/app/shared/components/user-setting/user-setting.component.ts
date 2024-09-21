@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { homeSignalStore } from '../../../internal/stores/home.signal-store';
+import { homeSignalStore } from '../../../internal/stores/home/home.signal-store';
 
 @Component({
   selector   : 'app-user-setting',

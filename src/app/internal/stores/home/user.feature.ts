@@ -4,9 +4,9 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { DialogService} from 'primeng/dynamicdialog';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { AppDB } from '../../dexie/db';
-import { UserSettingComponent } from '../../shared/components/user-setting/user-setting.component';
-import { TUser } from '../types/home.type'
+import { AppDB } from '../../../dexie/db';
+import { UserSettingComponent } from '../../../shared/components/user-setting/user-setting.component';
+import { TUser } from '../../types/home.type'
 
 // todo 関数の戻り値の型を定義する
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

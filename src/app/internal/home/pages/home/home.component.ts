@@ -6,7 +6,7 @@ import { AvatarModule } from 'primeng/avatar';
 import {TabViewModule  } from 'primeng/tabview';
 import { ToastModule  } from 'primeng/toast';
 
-import { homeSignalStore } from '../../../stores/home.signal-store';
+import { homeSignalStore } from '../../../stores/home/home.signal-store';
 import { TUser } from '../../../types/home.type';
 import { KanbanComponent } from '../../components/kanban/kanban.component';
 import { TimelineComponent } from '../../components/timeline/timeline.component';

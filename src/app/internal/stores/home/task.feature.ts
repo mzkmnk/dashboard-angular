@@ -4,8 +4,8 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { AppDB } from '../../dexie/db';
-import { TEditTask, TEditTasks, TTaskData } from '../types/home.type';
+import { AppDB } from '../../../dexie/db';
+import { TEditTask, TEditTasks, TTaskData } from '../../types/home.type';
 
 // todo 関数の戻り値の型を定義する
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

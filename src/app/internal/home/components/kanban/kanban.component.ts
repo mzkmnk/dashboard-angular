@@ -1,5 +1,5 @@
 import { DatePipe, KeyValuePipe } from '@angular/common';
-import { Component, inject, Signal } from '@angular/core';
+import { Component, inject, Signal,signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
@@ -7,18 +7,21 @@ import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { SidebarModule } from 'primeng/sidebar';
 import { TagModule } from 'primeng/tag';
 
-import { homeSignalStore } from '../../../stores/home.signal-store';
+import { homeSignalStore } from '../../../stores/home/home.signal-store';
 import { tags, TEditTasks, TTaskData, TTaskStatus, TUser } from '../../../types/home.type';
+import { AddTaskComponent } from '../add-task/add-task.component';
 
 @Component({
   selector   : 'app-kanban',
   standalone : true,
   imports    : [
     MultiSelectModule,
-    ButtonModule, 
+    ButtonModule,
     DividerModule,
     FloatLabelModule,
     CalendarModule,
@@ -27,7 +30,10 @@ import { tags, TEditTasks, TTaskData, TTaskStatus, TUser } from '../../../types/
     AvatarModule,
     DatePipe,
     KeyValuePipe,
-    FormsModule
+    FormsModule,
+    InputTextareaModule,
+    SidebarModule,
+    AddTaskComponent
   ],
   templateUrl : './kanban.component.html',
   styleUrl    : './kanban.component.scss'
@@ -43,6 +49,9 @@ export class KanbanComponent {
 
   /** 編集中のタスク */
   $editTasks: Signal<TEditTasks> = this.homeSignalStore.editingTasks;
+
+  /** サイドバー */
+  $sidebarVisible = signal(false);
 
   /** タグ一覧 */
   tags = tags;
@@ -82,6 +91,11 @@ export class KanbanComponent {
   generateRandomId = ():number => {
     return Math.floor(Math.random() * 1000000000); // 10桁の乱数
   }
+
+  /**
+   * サイドバーを表示する。
+   */
+  onClickShowSidebar = ():void => this.$sidebarVisible.set(true);
   
 
   /**

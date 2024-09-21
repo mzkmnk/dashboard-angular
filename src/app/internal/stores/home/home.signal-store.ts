@@ -1,7 +1,7 @@
 import { patchState, signalStore, signalStoreFeature, withHooks, withMethods, withState } from '@ngrx/signals';
 
-import { DB } from '../../dexie/db';
-import { THomeInitialState } from '../types/home.type';
+import { DB } from '../../../dexie/db';
+import { THomeInitialState } from '../../types/home.type';
 import { withTaskMethods } from './task.feature';
 import { withUserMethods } from './user.feature';
 

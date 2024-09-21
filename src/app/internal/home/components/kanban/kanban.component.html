@@ -7,8 +7,9 @@
                     <h4 class="ml-3 font-medium">{{ status }}</h4>
                     <p class="ml-5 aspect-square rounded-sm bg-indigo-100 px-2 text-center font-semibold text-indigo-800">{{ getStatusTaskCnt(status) }}</p>
                 </div>
-                <p-button class="text-xl" styleClass="text-slate-800" icon="pi pi-plus" severity="secondary"  [rounded]="true" [text]="true" (onClick)="onClickShowAddTask(status)"></p-button>
+                <p-button class="text-xl" styleClass="text-slate-800" icon="pi pi-plus" severity="secondary"  [rounded]="true" [text]="true" (onClick)="onClickShowSidebar()"></p-button>
             </div>
+            <app-add-task [($sidebarVisible)]="$sidebarVisible"></app-add-task>
             <div class="scrollbar h-[calc(100vh-165px)] overflow-auto rounded-b-2xl">
                 @for(editTask of $editTasks()|keyvalue;track editTask.value.id){
                     @if(editTask.value.status === status){
