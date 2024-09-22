@@ -24,7 +24,7 @@ export const withTaskMethods = (dexieDB:AppDB) => {
 
       addDetailTask: rxMethod<TTaskData>(
         pipe(
-          tap((task) => patchState(signalStore,{detailTask: task}) )
+          tap((task) => patchState(signalStore,{detailTask: {...task}}) )
         )
       ),
 
