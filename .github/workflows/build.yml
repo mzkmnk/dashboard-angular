@@ -8,20 +8,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 22.x
     - name: Install NPM packages
       run: npm ci
     - name: Build website
       run: npm run build --if-present -- --configuration production --base-href /booklog-viewer/
-    # - name: Test
-    #   run: npm test -- --watch=false --browsers=ChromeHeadless
     - name: Deploy 
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         BRANCH: gh-pages
-        FOLDER: dist/angular-ngrx-eslint-template
+        FOLDER: dist
         CLEAN: true
