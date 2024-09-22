@@ -2,7 +2,7 @@
     <ng-template pTemplate="header">
         @if($editMode()){
             <div class="flex w-full flex-row justify-end gap-4">
-                <p-button label="Save" [disabled]="$detailTask().title?.length === 0" (onClick)="onClickSaveTask()"></p-button>
+                <p-button label="Save" [disabled]="$detailEditTask().title?.length === 0" (onClick)="onClickSaveTask()"></p-button>
                 <p-button label="Cancel" [outlined]="true" (onClick)="onClickCloseSidebar()"></p-button>
             </div>
         }@else {
@@ -20,7 +20,7 @@
             </div>
             <div class="flex flex-1 flex-row items-center">
                 @if($editMode()){
-                    <input pInputText placeholder="Task Name" class="w-full text-xl" [(ngModel)]="$detailTask().title" />
+                    <input pInputText placeholder="Task Name" class="w-full text-xl" [(ngModel)]="$detailEditTask().title" />
                 }@else {
                     <h2 class="text-xl font-medium">{{ $detailTask().title?.length !== 0 ? $detailTask().title: 'No Title Data' }}</h2>
                 }
@@ -33,7 +33,6 @@
                 <p class="text-slate-500">Status</p>
             </div>
             <div class="flex flex-1 flex-row items-center gap-2">
-                <!-- <i class="pi pi-circle text-xl" [class]="taskStatusColor[$detailTask().status ?? 'Progress']"></i> -->
                 <p class="h-[1.5rem] w-[1.5rem]" [class]="taskStatusColor[$detailTask().status ?? 'Progress']"></p>
                 <p class="font-medium">{{ $detailTask().status }}</p>
             </div>
@@ -46,9 +45,9 @@
             </div>
             <div class="flex flex-1 flex-row items-center gap-3">
                 @if($editMode()){
-                    <p-calendar appendTo="body" [readonlyInput]="true" [(ngModel)]="$detailTask().startDate"></p-calendar>
+                    <p-calendar appendTo="body" [readonlyInput]="true" [(ngModel)]="$detailEditTask().startDate"></p-calendar>
                     <p class="text-xl">〜</p>
-                    <p-calendar appendTo="body" [readonlyInput]="true" [(ngModel)]="$detailTask().endDate"></p-calendar>
+                    <p-calendar appendTo="body" [readonlyInput]="true" [(ngModel)]="$detailEditTask().endDate"></p-calendar>
                 }@else {
                     <p class="text-lg font-medium">{{ $detailTask().startDate | date:'dd MMM yyyy' }}</p>
                     <p class="text-xl">〜</p>
@@ -64,7 +63,7 @@
             </div>
             <div class="flex flex-1 flex-row items-center">
                 @if($editMode()){
-                    <p-multiSelect class="w-full" styleClass="w-full" optionLabel="name" [options]="tags" [(ngModel)]="$detailTask().tags"></p-multiSelect>
+                    <p-multiSelect class="w-full" styleClass="w-full" optionLabel="name" [options]="tags" [(ngModel)]="$detailEditTask().tags"></p-multiSelect>
                 }@else {
                     @if(($detailTask().tags?? []).length > 0){
                         <div class="flex flex-row flex-wrap gap-4">
@@ -114,7 +113,7 @@
                             class="w-full text-base"
                             pInputTextarea
                             [autoResize]="true"
-                            [(ngModel)]="$detailTask().description">
+                            [(ngModel)]="$detailEditTask().description">
                         </textarea>
                     </p-tabPanel>
                     <p-tabPanel>
@@ -124,9 +123,9 @@
                             </div>
                         </ng-template>
                         <div class="h-auto rounded-lg border border-slate-300">
-                            <div class="px-[9px] py-[6px]" [innerHTML]="($detailTask().description ?? '') | markdown"></div>
+                            <div class="px-[9px] py-[6px]" [innerHTML]="($detailEditTask().description ?? '') | markdown"></div>
                         </div>
-                        <div>{{ $detailTask().description ?? '' | markdown}}</div>
+                        <div>{{ $detailEditTask().description ?? '' | markdown}}</div>
                     </p-tabPanel>
                 </p-tabView>
             }@else{
