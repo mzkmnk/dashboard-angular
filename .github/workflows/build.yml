@@ -16,10 +16,11 @@ jobs:
     - name: Install NPM packages
       run: npm ci
     - name: Build website
+      working-directory: github-option-three-app
       run: npm run build
     - name: Deploy 
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         BRANCH: gh-pages
-        FOLDER: dist/angular-ngrx-eslint-template
+        FOLDER: github-option-three-app/dist/angular-ngrx-eslint-template
         CLEAN: true
