@@ -100,7 +100,7 @@
             <div class="flex flex-row items-center gap-3">
                 <i class="pi pi-book text-xl text-slate-400"></i>
                 <p class="text-slate-500">Description</p>
-                <p-tag styleClass="font-semibold px-3 py-1" severity="danger" value="Developer PreView"></p-tag>
+                <p-tag styleClass="font-semibold px-3 py-1" severity="danger" pTooltip="バグが発生する可能性があります" value="Developer PreView"></p-tag>
             </div>
             @if($editMode()){
                 <p-tabView>
@@ -130,7 +130,7 @@
                     </p-tabPanel>
                 </p-tabView>
             }@else{
-                <div class="h-auto rounded-lg border border-slate-300">
+                <div class="h-auto min-h-20 rounded-lg border border-slate-300">
                     <div class="markdown-content px-[9px]" [innerHTML]="($detailTask().description ?? '') | markdown"></div>
                 </div>
             }

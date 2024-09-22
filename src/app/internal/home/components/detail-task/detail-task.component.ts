@@ -1,5 +1,5 @@
 import { AsyncPipe, DatePipe } from '@angular/common';
-import { Component, inject, model } from '@angular/core';
+import { Component, effect, inject, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -12,6 +12,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SidebarModule } from 'primeng/sidebar';
 import { TabViewModule } from 'primeng/tabview';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { MarkdownPipe } from '../../../../shared/pipes/markdown.pipe';
 import { HomeSignalStore } from '../../../stores/home/home.signal-store';
@@ -33,7 +34,8 @@ import { tags, taskStatusColor, typeGuard } from '../../../types/home.type';
     TagModule,
     MarkdownPipe,
     AsyncPipe,
-    MenuModule
+    MenuModule,
+    TooltipModule
   ],
   templateUrl : './detail-task.component.html',
   styleUrl    : './detail-task.component.scss',
@@ -116,5 +118,12 @@ export class DetailTaskComponent {
     }
     this.homeSignalStore.saveDetailTask({detailTask,tasks: this.homeSignalStore.tasks()})
     this.onClickEditMode();
+  }
+
+
+  constructor(){
+    effect(() => {
+      console.log(this.$detailTask().description)
+    })
   }
 }
