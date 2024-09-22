@@ -1,34 +1,27 @@
-name: CI
+name: Build and deploy website
 
-on: 
+on:
     pull_request:
         types: [opened, synchronize, reopened, closed]
-
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          mkdir data
-          echo "<h1>Hello GitHub Pages!</h1>" > data/index.html          
-      - uses: actions/upload-artifact@v3
-        with:
-          name: my_site
-          path: data
-      - uses: actions/upload-pages-artifact@v1
-        with:
-          path: data
-          
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      pages: write
-      id-token: write
-    steps:
-      - uses: actions/deploy-pages@v1
-        id: deployment
+    - uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 17.x
+    - name: Install NPM packages
+      run: npm ci
+    - name: Build website
+      run: npm run build --if-present -- --configuration production --base-href /booklog-viewer/
+    - name: Test
+      run: npm test -- --watch=false --browsers=ChromeHeadless
+    - name: Deploy 
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        BRANCH: gh-pages
+        FOLDER: dist/angular-ngrx-eslint-template
+        CLEAN: true
