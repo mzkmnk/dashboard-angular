@@ -54,6 +54,14 @@ export class AppDB extends Dexie {
     }
     return await DB.tasks.add(task);
   }
+
+  /**
+   * タスクを削除する
+   * @param taskId 
+   */
+  delTask = async (taskId:number) : Promise<void> => {
+    await DB.tasks.delete(taskId);
+  }
 }
 
 export const DB = new AppDB();

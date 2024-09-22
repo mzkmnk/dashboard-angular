@@ -2,12 +2,13 @@
     <ng-template pTemplate="header">
         @if($editMode()){
             <div class="flex w-full flex-row justify-end gap-4">
-                <p-button label="Save" (onClick)="onClickSaveTask()"></p-button>
+                <p-button label="Save" [disabled]="$detailTask().title?.length === 0" (onClick)="onClickSaveTask()"></p-button>
                 <p-button label="Cancel" [outlined]="true" (onClick)="onClickCloseSidebar()"></p-button>
             </div>
         }@else {
             <div class="flex">
-                <p-button icon="pi pi-pen-to-square" class=" text-2xl text-slate-800" severity="secondary"  [rounded]="true" [text]="true" (onClick)="onClickEditMode()"></p-button>
+                 <p-menu #menu appendTo="body" [model]="detailTaskItems" [popup]="true"></p-menu>
+                 <p-button icon="pi pi-ellipsis-h" [text]="true" (onClick)="menu.toggle($event)"></p-button>
             </div>
         }
     </ng-template>
@@ -95,26 +96,42 @@
             </div>
         </div>
 
-        <div class="flex flex-col items-start gap-3">
-            <div class="flex flex-row items-center gap-2">
+        <div class="flex flex-col gap-3">
+            <div class="flex flex-row items-center gap-3">
                 <i class="pi pi-book text-xl text-slate-400"></i>
                 <p class="text-slate-500">Description</p>
+                <p-tag styleClass="font-semibold px-3 py-1" severity="danger" value="Developer PreView"></p-tag>
             </div>
             @if($editMode()){
-                <textarea 
-                    class="w-full text-base"
-                    rows="5"
-                    cols="30" 
-                    pInputTextarea 
-                    [(ngModel)]="$detailTask().description">
-                </textarea>
+                <p-tabView>
+                    <p-tabPanel>
+                        <ng-template pTemplate="header">
+                            <div class="flex items-center gap-2">
+                                <p>Edit</p>
+                            </div>
+                        </ng-template>
+                        <textarea 
+                            class="w-full text-base"
+                            pInputTextarea 
+                            [(ngModel)]="$detailTask().description">
+                        </textarea>
+                    </p-tabPanel>
+                    <p-tabPanel>
+                        <ng-template pTemplate="header">
+                            <div class="flex items-center gap-2">
+                                <p>Preview</p>
+                            </div>
+                        </ng-template>
+                        <div class="min-h-24 rounded-lg border border-slate-300">
+                            <div class="px-[9px] py-[6px]" [innerHTML]="($detailTask().description ?? '') | markdown | async"></div>
+                        </div>
+                        <div>{{ $detailTask().description ?? '' | markdown | async }}</div>
+                    </p-tabPanel>
+                </p-tabView>
             }@else{
-                <textarea 
-                    class="w-full text-base"
-                    pInputTextarea 
-                    [readOnly]="true"
-                    [(ngModel)]="$detailTask().description">
-                </textarea>
+                <div class="min-h-24 rounded-lg border border-slate-300">
+                    <div class="px-[9px] py-[6px]" [innerHTML]="($detailTask().description ?? '') | markdown | async"></div>
+                </div>
             }
         </div>
         
@@ -137,6 +154,16 @@
                 </ng-template>
                 <div>
                     <p>Comming Soon : Comments</p>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel>
+                <ng-template pTemplate="header">
+                    <div class="flex items-center gap-2">
+                        <p>History</p>
+                    </div>
+                </ng-template>
+                <div>
+                    <p>Comming Soon : History</p>
                 </div>
             </p-tabPanel>
         </p-tabView>

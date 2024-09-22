@@ -81,11 +81,8 @@ export class KanbanComponent {
    * サイドバーを表示する。
    */
   onClickShowSidebar = (status:TTaskStatus,task:Partial<TTaskData>):void => { 
-    console.log(status,task);
-    console.log(!typeGuard.isTTaskData(task));
     this.$sidebarVisible.set(true);
     this.$editMode.set(!typeGuard.isTTaskData(task));
-    console.log(this.$editMode());
     this.homeSignalStore.addDetailTask(typeGuard.isTTaskData(task)
       ? task
       : {
