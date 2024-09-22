@@ -112,7 +112,8 @@
                         </ng-template>
                         <textarea 
                             class="w-full text-base"
-                            pInputTextarea 
+                            pInputTextarea
+                            [autoResize]="true"
                             [(ngModel)]="$detailTask().description">
                         </textarea>
                     </p-tabPanel>
@@ -122,15 +123,15 @@
                                 <p>Preview</p>
                             </div>
                         </ng-template>
-                        <div class="min-h-24 rounded-lg border border-slate-300">
-                            <div class="px-[9px] py-[6px]" [innerHTML]="($detailTask().description ?? '') | markdown | async"></div>
+                        <div class="h-auto rounded-lg border border-slate-300">
+                            <div class="px-[9px] py-[6px]" [innerHTML]="($detailTask().description ?? '') | markdown"></div>
                         </div>
-                        <div>{{ $detailTask().description ?? '' | markdown | async }}</div>
+                        <div>{{ $detailTask().description ?? '' | markdown}}</div>
                     </p-tabPanel>
                 </p-tabView>
             }@else{
-                <div class="min-h-24 rounded-lg border border-slate-300">
-                    <div class="px-[9px] py-[6px]" [innerHTML]="($detailTask().description ?? '') | markdown | async"></div>
+                <div class="h-auto rounded-lg border border-slate-300">
+                    <div class="markdown-content px-[9px]" [innerHTML]="($detailTask().description ?? '') | markdown"></div>
                 </div>
             }
         </div>
