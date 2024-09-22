@@ -10,11 +10,11 @@
                 </div>
                 <p-button class="text-xl" styleClass="text-slate-800" icon="pi pi-plus" severity="secondary"  [rounded]="true" [text]="true" (onClick)="onClickShowSidebar(status,{})"></p-button>
             </div>
-            <div class="scrollbar h-[calc(100vh-165px)] overflow-auto rounded-b-2xl">
+            <div class="scrollbar h-[calc(100vh-165px)] overflow-auto rounded-b-2xl" pDroppable (onDrop)="onDropTask(status)">
                 @for(task of $tasks();let j = $index; track j){
                     @if(task.status === status){
-                        <div class="mb-5 flex flex-col  rounded-md border bg-white p-4 shadow-sm" (click)="onClickShowSidebar(status,task)">
-                            <div class="mb-2 flex flex-row gap-2">
+                        <div class="mb-5 flex flex-col  rounded-lg border bg-white p-4 shadow-sm" pDraggable (onDragStart)="onDragStartTask(task)" (onDragEnd)="onDragEndTask()" (click)="onClickShowSidebar(status,task)">
+                            <div class="scrollbar mb-2 flex flex-row gap-2 overflow-auto">
                                 @if(task.tags.length === 0){
                                     <p-tag styleClass="font-semibold" value="No Tags" severity="secondary"></p-tag>
                                 }@else {

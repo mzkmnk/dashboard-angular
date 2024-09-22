@@ -67,7 +67,7 @@
                     <p-multiSelect class="w-full" styleClass="w-full" optionLabel="name" [options]="tags" [(ngModel)]="$detailTask().tags"></p-multiSelect>
                 }@else {
                     @if(($detailTask().tags?? []).length > 0){
-                        <div class="flex flex-row gap-4">
+                        <div class="flex flex-row flex-wrap gap-4">
                             @for(tag of $detailTask().tags; let i = $index; track i){
                                 <p-tag styleClass="px-3 py-1" [value]="tag.name"></p-tag>
                             }

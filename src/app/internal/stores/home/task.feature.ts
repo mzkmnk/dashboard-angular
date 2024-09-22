@@ -2,10 +2,10 @@ import { inject } from '@angular/core';
 import { patchState, signalStoreFeature, withMethods } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { MessageService } from 'primeng/api';
-import { pipe, switchMap, tap } from 'rxjs';
+import { mergeMap, pipe, switchMap, tap } from 'rxjs';
 
 import { AppDB } from '../../../dexie/db';
-import { TTaskData } from '../../types/home.type';
+import { TTaskData, TTaskStatus, typeGuard } from '../../types/home.type';
 
 // todo 関数の戻り値の型を定義する
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -24,6 +24,24 @@ export const withTaskMethods = (dexieDB:AppDB) => {
           tap(() => patchState(signalStore,{common: {isLoading: false}})),
         )
       ),
+
+      dropTask: rxMethod<{ task: Partial<TTaskData>,tasks: TTaskData[],taskStatus: TTaskStatus }>(pipe(
+        mergeMap(async ({task,tasks,taskStatus}) => {
+          if(!typeGuard.isTTaskData(task)){
+            return
+          }
+          await dexieDB.saveTask({...task,status: taskStatus},true);
+          patchState(signalStore,{
+            tasks: [
+              {
+                ...task,
+                status: taskStatus
+              },
+              ...tasks.filter(t => t.id !== task.id) 
+            ]
+          })
+        })
+      )),
 
       /** タスクを追加する */
       addDetailTask: rxMethod<TTaskData>(
@@ -66,7 +84,7 @@ export const withTaskMethods = (dexieDB:AppDB) => {
       deleteTask: rxMethod<{ task: Partial<TTaskData>,tasks: TTaskData[] }>(
         pipe(
           tap(async ({task}) => {
-            if(!task.id){
+            if(!typeGuard.isTTaskData(task)){
               return
             }
             await dexieDB.delTask(task.id);

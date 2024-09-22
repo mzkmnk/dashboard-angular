@@ -1,5 +1,5 @@
 import { AsyncPipe, DatePipe } from '@angular/common';
-import { Component, effect, inject, model } from '@angular/core';
+import { Component, inject, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -118,12 +118,5 @@ export class DetailTaskComponent {
     }
     this.homeSignalStore.saveDetailTask({detailTask,tasks: this.homeSignalStore.tasks()})
     this.onClickEditMode();
-  }
-
-
-  constructor(){
-    effect(() => {
-      console.log(this.$detailTask().description)
-    })
   }
 }

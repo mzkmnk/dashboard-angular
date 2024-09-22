@@ -46,24 +46,70 @@ export type TTag = {
   code : string,
 }
 
-export const tags:TTag[] = [
+export const tags: TTag[] = [
   {
     name : 'Frontend',
     code : 'Frontend',
   },
   {
     name : 'Backend',
-    code : 'Backend'
+    code : 'Backend',
   },
   {
     name : 'UI',
-    code : 'UI'
+    code : 'UI',
   },
   {
     name : 'UX',
-    code : 'UX'
+    code : 'UX',
+  },
+  {
+    name : 'DevOps',
+    code : 'DevOps',
+  },
+  {
+    name : 'Database',
+    code : 'Database',
+  },
+  {
+    name : 'Security',
+    code : 'Security',
+  },
+  {
+    name : 'Testing',
+    code : 'Testing',
+  },
+  {
+    name : 'Mobile',
+    code : 'Mobile',
+  },
+  {
+    name : 'Cloud',
+    code : 'Cloud',
+  },
+  {
+    name : 'Feature',
+    code : 'Feature',
+  },
+  {
+    name : 'Bug',
+    code : 'Bug',
+  },
+  {
+    name : 'Improvement',
+    code : 'Improvement',
+  },
+  {
+    name : 'Refactor',
+    code : 'Refactor',
+  },
+  {
+    name : 'Documentation',
+    code : 'Documentation',
   }
 ];
+
+
 
 /** タスクのステータスに応じた色を設定する。*/
 export const taskStatusColor: {[key in TTaskStatus]: string } = {
