@@ -43,7 +43,7 @@ export class TimelineComponent {
     // endDay = 5
     // width = (71 + (0.25*(endDay-startDay))) * (endDay-startDay)
     const startDay = 2;
-    const endDay = 5 + 1;
+    const endDay = 9 + 1;
     const adjust = 10;
     return {
       top   : '2.5px',

@@ -19,7 +19,7 @@
             </div>
         } -->
             <div>
-                <div class="absolute flex min-h-28 flex-col gap-2 rounded-xl border bg-white p-4 shadow-sm" [style]=calcTaskPostion()>
+                <div class="absolute flex min-h-32 flex-col gap-2 rounded-xl border bg-white p-4 shadow-sm" [style]=calcTaskPostion()>
                     <div class="scrollbar flex flex-row gap-2 overflow-auto">
                         @if($tasks()[0].tags.length === 0){
                             <p-tag styleClass="font-semibold" value="No Tags" severity="secondary"></p-tag>
