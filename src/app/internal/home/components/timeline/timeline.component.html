@@ -1,4 +1,4 @@
-<div class="flex">
+<div #nowDate class="flex">
     <div class="scrollbar relative flex flex-row overflow-auto">
         @for(pair of calendar|keyvalue;let i = $index;track i){
             @for(value of pair.value;let j = $index;track j){
@@ -18,8 +18,8 @@
                 <p>{{task.title}}</p>
             </div>
         } -->
-            @let task = $tasks()[1];
-            <div class="absolute flex min-h-32 flex-col gap-2 rounded-xl border bg-white p-4 shadow-sm" [style]=calcTaskPostion(task)>
+            @let task = $tasks()[2];
+            <div #nowDate class="absolute flex min-h-32 flex-col gap-2 rounded-xl border bg-white p-4 shadow-sm" [style]=calcTaskPostion(task)>
                 <div>
                     <p-tag styleClass="font-semibold" severity="secondary" [value]="task.status"></p-tag>
                 </div>

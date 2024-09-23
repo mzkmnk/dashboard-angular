@@ -1,5 +1,5 @@
 import { DatePipe, KeyValuePipe } from '@angular/common';
-import {Component, inject } from '@angular/core';
+import {Component, effect, ElementRef, inject, viewChild } from '@angular/core';
 import { eachDayOfInterval } from 'date-fns';
 import { ChipModule } from 'primeng/chip';
 import { DividerModule } from 'primeng/divider';
@@ -52,18 +52,21 @@ export class TimelineComponent {
       11 : this.getCreateMonthDate(11,2024),
       12 : this.getCreateMonthDate(12,2024),
     };
+
+    effect(() => {
+      console.log(this.scrollTimelinePosition()?.nativeElement.getBoundingClientRect());;
+    })
   }
 
+  /** スクロール位置を特定 */
+  scrollTimelinePosition = viewChild<ElementRef>('nowDate');
+
   /**
-   * ほんとは引数にタスクを取得してstartDayとendDayなどを計算する
+   * タスクの位置を計算する
+   * @param task 
+   * @returns 
    */
   calcTaskPostion = (task:TTaskData):TTaskPosition => {
-    // w-24 : 6rem; /* 96px */ + border 71らしい
-    // 計算方法(beta)
-    // x =  71*(startDay-1)
-    // startDay = 1
-    // endDay = 5
-    // width = (71 + (0.25*(endDay-startDay))) * (endDay-startDay)
     let initDate = 0;
     Object.keys(this.calendar).forEach((key) => {
       if(Number(key) >= task.startDate.getMonth()){
@@ -73,11 +76,11 @@ export class TimelineComponent {
     })
     const startDate = task.startDate.getDate() + initDate;
     const endDate = task.endDate.getDate()+1 + initDate;
-    const widthBase = 71;
+    const widthBase = 72;
     return {
       top   : '2.5px',
-      left  : (widthBase+(0.25*(endDate-startDate)))*(startDate-1) + 'px',
-      width : (widthBase + (0.25*(endDate-startDate))) * (endDate-startDate)+1 + 'px',
+      left  : widthBase*(startDate-1) + 'px',
+      width : widthBase * (endDate-startDate)+1 + 'px',
     }
   }
 
