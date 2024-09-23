@@ -114,7 +114,6 @@ export class KanbanComponent {
 
   /** タスクをドロップした時の関数 */
   onDropTask = (taskStatus:TTaskStatus):void => {
-    console.log(taskStatus);
     this.homeSignalStore.dropTask({task: this.$dragTask(),tasks: this.$tasks(),taskStatus});
     this.$dragTask.set({});
   }

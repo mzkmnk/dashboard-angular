@@ -4,8 +4,8 @@
     <!-- ヘッダー -->
     <!-- <div class="h-16 px-3"></div> -->
     <!-- メインコンテンツ -->
-    <div class="flex h-full flex-row">
-        <div class="h-full w-full px-14 pt-1">
+    <div class="flex h-full flex-col">
+        <div class="w-full px-14 pt-1">
             <div class="flex w-full items-center justify-between pb-1">
                 <div class="flex flex-col">
                     <h1 class="font-semibold">Tasks</h1>
@@ -14,30 +14,30 @@
                     <p-avatar [style]="$user().style" [label]="$user().label" [size]="$user().size" [shape]="$user().shape"></p-avatar>
                 </div>
             </div>
-            <p-tabView>
-                <p-tabPanel>
-                    <ng-template pTemplate="header">
-                        <div class="flex items-center gap-2">
-                            <i class="pi pi-th-large"></i>
-                            <span class="m-0 font-bold">
-                                <p>Kanban</p>
-                            </span>
-                        </div>
-                    </ng-template>
-                    <app-kanban></app-kanban>
-                </p-tabPanel>
-                <p-tabPanel>
-                    <ng-template pTemplate="header">
-                        <div class="flex items-center gap-2">
-                            <i class="pi pi-align-right"></i>
-                            <span class="m-0 font-bold">
-                                <p>Timeline</p>
-                            </span>
-                        </div>
-                    </ng-template>
-                    <app-timeline></app-timeline>
-                </p-tabPanel>
-            </p-tabView>
         </div>
+        <p-tabView>
+            <p-tabPanel>
+                <ng-template pTemplate="header">
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-th-large"></i>
+                        <span class="m-0 font-bold">
+                            <p>Kanban</p>
+                        </span>
+                    </div>
+                </ng-template>
+                <app-kanban></app-kanban>
+            </p-tabPanel>
+            <p-tabPanel>
+                <ng-template pTemplate="header">
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-align-right"></i>
+                        <span class="m-0 font-bold">
+                            <p>Timeline</p>
+                        </span>
+                    </div>
+                </ng-template>
+                <app-timeline></app-timeline>
+            </p-tabPanel>
+        </p-tabView>
     </div>
 </div>

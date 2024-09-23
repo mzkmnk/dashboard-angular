@@ -10,8 +10,9 @@ export class AppDB extends Dexie {
   constructor() {
     super(environment.db.tasksDataBase);
     this.version(1).stores({
-      tasks : '++id, status, title, description, members, tags, tagStyleClass, startDate, endDate',
-      user  : '++id, label, size, shape, style'
+      tasks    : '++id, status, title, description, members, tags, tagStyleClass, startDate, endDate', // タスク
+      user     : '++id, label, size, shape, style', // ユーザ
+      subTasks : '++id, taskId, title, description, startDate, endDate,status', // サブタスク
     })
   }
 

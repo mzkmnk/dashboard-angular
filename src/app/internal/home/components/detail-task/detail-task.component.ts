@@ -141,7 +141,6 @@ export class DetailTaskComponent {
   /** 編集したタスクを保存する */
   onClickSaveTask = ():void => {
     const detailEditTask = this.$detailEditTask();
-    console.log(detailEditTask)
     if(!typeGuard.isTTaskData(detailEditTask)){
       return
     }

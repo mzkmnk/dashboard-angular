@@ -9,7 +9,6 @@ export type THomeInitialState = {
   tasks      : TTaskData[],
 }
 
-
 export type TUser = {
   id       : number,
   label    : string,
