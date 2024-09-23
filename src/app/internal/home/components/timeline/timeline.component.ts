@@ -79,8 +79,8 @@ export class TimelineComponent {
     const widthBase = 72;
     return {
       top   : '2.5px',
-      left  : widthBase*(startDate-1) + 'px',
-      width : widthBase * (endDate-startDate)+1 + 'px',
+      left  : widthBase*(startDate-1)+10 + 'px',
+      width : widthBase * (endDate-startDate) - 20 + 'px',
     }
   }
 
