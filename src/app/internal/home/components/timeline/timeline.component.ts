@@ -9,9 +9,9 @@ import { HomeSignalStore } from '../../../stores/home/home.signal-store';
 import { TTaskData } from '../../../types/home.type';
 
 export type TTaskPosition = {
-  top   : string,
-  left  : string,
-  width : string,
+  top   : number,
+  left  : number
+  width : number
 }
 
 @Component({
@@ -57,68 +57,21 @@ export class TimelineComponent {
     };
 
     effect(() => {
-      console.log(this.scrollTimelinePosition()?.nativeElement.getBoundingClientRect());;
-    })
+      console.log(this.scrollTimelinePosition()?.nativeElement.getBoundingClientRect());
+    });
+
+    effect(() => ((tasks:TTaskData[]):void => {
+      tasks.map((task):void => {
+        if(Object.hasOwnProperty.call(this.tasksPosition,task.id)){
+          return
+        };
+        this.tasksPosition[task.id] = calcTaskPostion(task,this.tasksPosition,this.calendar);
+      })
+    })(this.$tasks()))
   }
 
   /** スクロール位置を特定 */
   scrollTimelinePosition = viewChild<ElementRef>('nowDate');
-
-  /**
-   * タスクの位置を計算する
-   * @param task 
-   * @returns 
-   */
-  calcTaskPostion = (task:TTaskData):TTaskPosition => {
-    let initDate = 0;
-    Object.keys(this.calendar).forEach((key) => {
-      if(Number(key) >= task.startDate.getMonth()){
-        return
-      }
-      initDate += this.calendar[Number(key)].length;
-    })
-    const startDate = task.startDate.getDate() + initDate;
-    const endDate = task.endDate.getDate()+1 + initDate;
-    const widthBase = 72;
-    const [
-      left,width 
-    ] = [
-      widthBase*(startDate-1)+10,widthBase * (endDate-startDate) - 20 
-    ];
-    let top = 2.5;
-    console.log('tasksPosition',this.tasksPosition);
-    if(Object.prototype.hasOwnProperty.call(this.tasksPosition, task.id)){
-      return {
-        top   : this.tasksPosition[task.id].top + 'px',
-        left  : this.tasksPosition[task.id].left + 'px',
-        width : this.tasksPosition[task.id].width + 'px',
-      }
-    }
-    Object.keys(this.tasksPosition).forEach((key) => {
-      const [
-        startX,
-        endX 
-      ] = [
-        this.tasksPosition[Number(key)].left,
-        this.tasksPosition[Number(key)].width 
-      ]
-      console.log(startX,endX);
-      if(startX <= left || width <= endX){
-        top += 190;
-      }
-    })
-    console.log(task.id);
-    this.tasksPosition[task.id] = {
-      top,
-      left,
-      width
-    }
-    return {
-      top   : top+'px',
-      left  : left + 'px',
-      width : width + 'px',
-    }
-  }
 
   /**
    * 与えれたmonthとyearからその月の日付を取得する
@@ -137,5 +90,59 @@ export class TimelineComponent {
    */
   isStartDate = (date:Date,taskDate:Date):boolean => {
     return date.getTime() === taskDate.getTime()
+  }
+}
+
+
+/**
+   * タスクの位置を計算する
+   * @param task 
+   * @returns 
+   */
+export const calcTaskPostion = (
+  task:TTaskData,
+  tasksPosition:{[key in number]:{ left: number,width: number,top: number } },
+  calendar:{[key in number]:Date[]}
+):TTaskPosition => {
+  let initDate = 0;
+  Object.keys(calendar).forEach((key) => {
+    if(Number(key) >= task.startDate.getMonth()){
+      return
+    }
+    initDate += calendar[Number(key)].length;
+  })
+  const startDate = task.startDate.getDate() + initDate;
+  const endDate = task.endDate.getDate()+1 + initDate;
+  const widthBase = 72;
+  const [
+    left,width 
+  ] = [
+    widthBase*(startDate-1)+10,widthBase * (endDate-startDate) - 20 
+  ];
+  let top = 2.5;
+  if(Object.prototype.hasOwnProperty.call(tasksPosition, task.id)){
+    return {
+      top   : tasksPosition[task.id].top,
+      left  : tasksPosition[task.id].left,
+      width : tasksPosition[task.id].width,
+    }
+  }
+  Object.keys(tasksPosition).forEach((key) => {
+    const [
+      startX,
+      endX 
+    ] = [
+      tasksPosition[Number(key)].left,
+      tasksPosition[Number(key)].width 
+    ]
+    console.log(startX,endX);
+    if(startX <= left || width <= endX){
+      top += 190;
+    }
+  })
+  return {
+    top,
+    left,
+    width
   }
 }

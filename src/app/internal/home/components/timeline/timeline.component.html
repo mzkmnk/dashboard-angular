@@ -15,7 +15,7 @@
         <div class="absolute top-16">
         @for(task of $tasks();let i = $index;track i){
             <!-- @let task = $tasks()[2]; -->
-            <div #nowDate class="absolute flex min-h-32 flex-col gap-2 rounded-xl border bg-white p-4 shadow-sm" [style]=calcTaskPostion(task)>
+            <div #nowDate class="absolute flex min-h-32 flex-col gap-2 rounded-xl border bg-white p-4 shadow-sm">
                 <div>
                     <p-tag styleClass="font-semibold" severity="secondary" [value]="task.status"></p-tag>
                 </div>
