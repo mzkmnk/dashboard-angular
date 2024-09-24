@@ -8,9 +8,9 @@ describe('DetailTaskComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DetailTaskComponent]
+      imports: [ DetailTaskComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(DetailTaskComponent);
     component = fixture.componentInstance;

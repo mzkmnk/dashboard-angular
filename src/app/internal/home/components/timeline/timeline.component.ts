@@ -37,6 +37,9 @@ export class TimelineComponent {
   /** 月のその月に対する日付を格納する */
   calendar: {[key in number]:Date[]} = {};
 
+  /** 各タスクのポジション(startX,endX) */
+  tasksPosition: {[key in number]:{ left: number,width: number,top: number } } = {};
+
   constructor(){
     this.calendar = {
       1  : this.getCreateMonthDate(1,2024),
@@ -77,10 +80,40 @@ export class TimelineComponent {
     const startDate = task.startDate.getDate() + initDate;
     const endDate = task.endDate.getDate()+1 + initDate;
     const widthBase = 72;
+    let [
+      top,left,width 
+    ] = [
+      2.5,widthBase*(startDate-1)+10,widthBase * (endDate-startDate) - 20 
+    ];
+    console.log('tasksPosition',this.tasksPosition);
+    if(this.tasksPosition.hasOwnProperty(task.id)){
+      return {
+        top   : this.tasksPosition[task.id].top + 'px',
+        left  : this.tasksPosition[task.id].left + 'px',
+        width : this.tasksPosition[task.id].width + 'px',
+      }
+    }
+    Object.keys(this.tasksPosition).forEach((key) => {
+      const [
+        startX,endX 
+      ] = [
+        this.tasksPosition[Number(key)].left,this.tasksPosition[Number(key)].width 
+      ]
+      console.log(startX,endX);
+      if(startX <= left && width <= endX){
+        top += 700;
+      }
+    })
+    console.log(task.id);
+    this.tasksPosition[task.id] = {
+      top,
+      left,
+      width
+    }
     return {
-      top   : '2.5px',
-      left  : widthBase*(startDate-1)+10 + 'px',
-      width : widthBase * (endDate-startDate) - 20 + 'px',
+      top   : top+'px',
+      left  : left + 'px',
+      width : width + 'px',
     }
   }
 
