@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { homeSignalStore } from '../../../internal/stores/home.signal-store';
+import { HomeSignalStore } from '../../../internal/stores/home/home.signal-store';
 
 @Component({
   selector   : 'app-user-setting',
@@ -16,7 +16,7 @@ import { homeSignalStore } from '../../../internal/stores/home.signal-store';
   styleUrl    : './user-setting.component.scss'
 })
 export class UserSettingComponent {
-  private readonly homeSignalStore = inject(homeSignalStore);
+  private readonly homeSignalStore = inject(HomeSignalStore);
   private readonly dynamicDialogRef = inject(DynamicDialogRef);
 
   $isLoading : Signal<boolean> = this.homeSignalStore.common.isLoading;

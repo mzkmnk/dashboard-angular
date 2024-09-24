@@ -10,8 +10,9 @@ export class AppDB extends Dexie {
   constructor() {
     super(environment.db.tasksDataBase);
     this.version(1).stores({
-      tasks : '++id, status, title, description, members, tags, tagStyleClass, startDate, endDate',
-      user  : '++id, label, size, shape, style'
+      tasks    : '++id, status, title, description, members, tags, tagStyleClass, startDate, endDate', // タスク
+      user     : '++id, label, size, shape, style', // ユーザ
+      subTasks : '++id, taskId, title, description, startDate, endDate,status', // サブタスク
     })
   }
 
@@ -45,18 +46,22 @@ export class AppDB extends Dexie {
   }
 
   /**
-   * タスクの最大値のIDを取得する。
+   * タスクを追加,上書きする。
+   * @param task タスクデータ
    */
-  getTasksMaxId = async ():Promise<number> => {
-    return await DB.tasks.orderBy('id').last().then(task => task?.id || 0);
+  saveTask = async (task:TTaskData,isEdit:boolean) : Promise<number> => {
+    if(isEdit){
+      return await DB.tasks.update(task.id,task);
+    }
+    return await DB.tasks.add(task);
   }
 
   /**
-   * タスクを追加する。
-   * @param task タスクデータ
+   * タスクを削除する
+   * @param taskId 
    */
-  addTask = async (task:TTaskData) : Promise<number> => {
-    return await DB.tasks.add(task);
+  delTask = async (taskId:number) : Promise<void> => {
+    await DB.tasks.delete(taskId);
   }
 }
 

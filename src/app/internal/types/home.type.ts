@@ -4,9 +4,9 @@ export type THomeInitialState = {
   common : {
     isLoading: boolean
   },
-  user         : TUser,
-  editingTasks : TEditingTasks
-  tasks        : TTaskData[],
+  user       : Partial<TUser>,
+  detailTask : Partial<TTaskData>,
+  tasks      : TTaskData[],
 }
 
 export type TUser = {
@@ -40,28 +40,96 @@ export type TTaskData = {
   endDate     : Date
 }
 
-export type TEditingTasks = Record<number,TTaskData>;
-
 export type TTag = {
   name : string,
   code : string,
 }
 
-export const tags:TTag[] = [
+export const tags: TTag[] = [
   {
     name : 'Frontend',
-    code : 'Frontend'
+    code : 'Frontend',
   },
   {
     name : 'Backend',
-    code : 'Backend'
+    code : 'Backend',
   },
   {
     name : 'UI',
-    code : 'UI'
+    code : 'UI',
   },
   {
     name : 'UX',
-    code : 'UX'
+    code : 'UX',
+  },
+  {
+    name : 'DevOps',
+    code : 'DevOps',
+  },
+  {
+    name : 'Database',
+    code : 'Database',
+  },
+  {
+    name : 'Security',
+    code : 'Security',
+  },
+  {
+    name : 'Testing',
+    code : 'Testing',
+  },
+  {
+    name : 'Mobile',
+    code : 'Mobile',
+  },
+  {
+    name : 'Cloud',
+    code : 'Cloud',
+  },
+  {
+    name : 'Feature',
+    code : 'Feature',
+  },
+  {
+    name : 'Bug',
+    code : 'Bug',
+  },
+  {
+    name : 'Improvement',
+    code : 'Improvement',
+  },
+  {
+    name : 'Refactor',
+    code : 'Refactor',
+  },
+  {
+    name : 'Documentation',
+    code : 'Documentation',
   }
 ];
+
+
+
+/** タスクのステータスに応じた色を設定する。*/
+export const taskStatusColor: {[key in TTaskStatus]: string } = {
+  Ready    : 'border-slate-400 inline-block rounded-[50%] border-2 text-center',
+  Progress : 'border-cyan-500 inline-block rounded-[50%] border-2 text-center',
+  Review   : 'border-amber-500 inline-block rounded-[50%] border-2 text-center',
+  Done     : 'border-lime-500 inline-block rounded-[50%] border-2 text-center'
+}
+
+export const typeGuard = {
+  isTTaskData(obj: Partial<TTaskData> ):obj is TTaskData{
+    return (
+      obj && 
+      typeof obj.id === 'number' &&
+      typeof obj.status === 'string' &&
+      typeof obj.title === 'string' &&
+      typeof obj.description === 'string' &&
+      Array.isArray(obj.members) &&
+      Array.isArray(obj.tags) &&
+      obj.startDate instanceof Date &&
+      obj.endDate instanceof Date
+    )
+  },
+} as const;

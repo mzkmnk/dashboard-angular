@@ -1,7 +1,7 @@
 import { patchState, signalStore, signalStoreFeature, withHooks, withMethods, withState } from '@ngrx/signals';
 
-import { DB } from '../../dexie/db';
-import { THomeInitialState } from '../types/home.type';
+import { DB } from '../../../dexie/db';
+import { THomeInitialState } from '../../types/home.type';
 import { withTaskMethods } from './task.feature';
 import { withUserMethods } from './user.feature';
 
@@ -17,8 +17,8 @@ export const homeInitialState : THomeInitialState = {
     shape    : 'circle',
     style    : { 'background-color': '#ece9fc' }
   },
-  editingTasks : {},
-  tasks        : []
+  detailTask : {},
+  tasks      : []
 }
 
 const dexieDB = DB;
@@ -36,7 +36,7 @@ export const withCommonMethods = () => {
   )
 }
 
-export const homeSignalStore = signalStore(
+export const HomeSignalStore = signalStore(
   {providedIn: 'root'},
   withState<THomeInitialState>(homeInitialState),
   withCommonMethods(),
