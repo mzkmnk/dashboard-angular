@@ -80,13 +80,14 @@ export class TimelineComponent {
     const startDate = task.startDate.getDate() + initDate;
     const endDate = task.endDate.getDate()+1 + initDate;
     const widthBase = 72;
-    let [
-      top,left,width 
+    const [
+      left,width 
     ] = [
-      2.5,widthBase*(startDate-1)+10,widthBase * (endDate-startDate) - 20 
+      widthBase*(startDate-1)+10,widthBase * (endDate-startDate) - 20 
     ];
+    let top = 2.5;
     console.log('tasksPosition',this.tasksPosition);
-    if(this.tasksPosition.hasOwnProperty(task.id)){
+    if(Object.prototype.hasOwnProperty.call(this.tasksPosition, task.id)){
       return {
         top   : this.tasksPosition[task.id].top + 'px',
         left  : this.tasksPosition[task.id].left + 'px',
