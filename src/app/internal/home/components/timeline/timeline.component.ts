@@ -1,5 +1,5 @@
-import { DatePipe, KeyValuePipe } from '@angular/common';
-import {Component, effect, ElementRef, inject, viewChild } from '@angular/core';
+import { CommonModule, DatePipe, KeyValuePipe } from '@angular/common';
+import {Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { eachDayOfInterval } from 'date-fns';
 import { ChipModule } from 'primeng/chip';
 import { DividerModule } from 'primeng/divider';
@@ -22,7 +22,8 @@ export type TTaskPosition = {
     DatePipe,
     TagModule,
     DividerModule,
-    ChipModule
+    ChipModule,
+    CommonModule,
   ],
   templateUrl : './timeline.component.html',
   styleUrl    : './timeline.component.scss'
@@ -33,6 +34,8 @@ export class TimelineComponent {
   $tasks = this.homeSignalStore.tasks;
 
   $user = this.homeSignalStore.user;
+
+  $maxTaskPosition = signal(0);
 
   /** 月のその月に対する日付を格納する */
   calendar: {[key in number]:Date[]} = {};
@@ -66,12 +69,28 @@ export class TimelineComponent {
           return
         };
         this.tasksPosition[task.id] = calcTaskPostion(task,this.tasksPosition,this.calendar);
+        this.$maxTaskPosition.update((val) => {
+          return Math.max(val,this.tasksPosition[task.id].top + 190)
+        })
       })
-    })(this.$tasks()))
+    })(this.$tasks()),{allowSignalWrites: true})
   }
 
   /** スクロール位置を特定 */
   scrollTimelinePosition = viewChild<ElementRef>('nowDate');
+
+  getTaskPosition = (task:TTaskData):{ top: string,left: string,width: string } => {
+    const [
+      top,left,width 
+    ] = [
+      this.tasksPosition[task.id].top,this.tasksPosition[task.id].left,this.tasksPosition[task.id].width 
+    ];
+    return {
+      top   : `${top}px`,
+      left  : `${left}px`,
+      width : `${width}px`
+    }
+  }
 
   /**
    * 与えれたmonthとyearからその月の日付を取得する
@@ -135,7 +154,6 @@ export const calcTaskPostion = (
       tasksPosition[Number(key)].left,
       tasksPosition[Number(key)].width 
     ]
-    console.log(startX,endX);
     if(startX <= left || width <= endX){
       top += 190;
     }

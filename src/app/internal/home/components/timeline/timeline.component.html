@@ -1,8 +1,8 @@
 <div #nowDate class="flex">
-    <div class="scrollbar relative flex flex-row overflow-auto">
+    <div class="scrollbar relative flex flex-row overflow-x-auto">
         @for(pair of calendar|keyvalue;let i = $index;track i){
             @for(value of pair.value;let j = $index;track j){
-                <div class="flex h-dvh min-w-24 flex-col">
+                <div class="flex min-w-24 flex-col" [ngStyle]="{'height': $maxTaskPosition() + 'px'}">
                     <div class="border-b-[0.25px] border-slate-200 pb-3">
                         <p class="text-center font-semibold text-slate-400">{{value|date:'EEE'}}</p>
                         <p class="text-center font-semibold">{{value|date:'dd'}}</p>
@@ -15,38 +15,39 @@
         <div class="absolute top-16">
         @for(task of $tasks();let i = $index;track i){
             <!-- @let task = $tasks()[2]; -->
-            <div #nowDate class="absolute flex min-h-32 flex-col gap-2 rounded-xl border bg-white p-4 shadow-sm">
-                <div>
-                    <p-tag styleClass="font-semibold" severity="secondary" [value]="task.status"></p-tag>
-                </div>
-                <div class="scrollbar flex flex-row gap-2 overflow-auto">
-                    @if(task.tags.length === 0){
-                        <p-tag styleClass="font-semibold" value="No Tags" severity="secondary"></p-tag>
-                    }@else {
-                        @for(tag of task.tags;let k=$index; track k){
-                            <p-tag styleClass="font-semibold" [value]="tag.name"></p-tag>
+                <div #nowDate class="absolute flex min-h-32 flex-col gap-2 rounded-xl border bg-white p-4 shadow-sm" [style]="getTaskPosition(task)">
+                    <div>
+                        <p-tag styleClass="font-semibold" severity="secondary" [value]="task.status"></p-tag>
+                    </div>
+                    <div class="scrollbar flex flex-row gap-2 overflow-auto">
+                        @if(task.tags.length === 0){
+                            <p-tag styleClass="font-semibold" value="No Tags" severity="secondary"></p-tag>
+                        }@else {
+                            @for(tag of task.tags;let k=$index; track k){
+                                <p-tag styleClass="font-semibold" [value]="tag.name"></p-tag>
+                            }
                         }
-                    }
-                </div>
-                <p class="text-lg">{{ task.title }}</p>
-                <p-divider />
-                <div class="flex flex-row items-center justify-between">
-                    <div class="flex flex-1 flex-row items-center">
-                        <p-chip styleClass="pl-0 pr-3">
-                            <span class="flex h-[2rem] w-[2rem] items-center justify-center rounded-full bg-indigo-300">
-                                {{ $user().label }}
-                            </span>
-                            <span class="ml-1 font-medium">
-                                {{ $user().username }}
-                            </span>
-                        </p-chip>
                     </div>
-                    <div class="flex flex-row items-center gap-2 text-slate-400">
-                        <i class="pi pi-calendar-clock text-sm"></i>
-                        <p class="text-xs">{{ task.endDate | date:'MMM d yyyy' }}</p>
+                    <p class="text-lg">{{ task.title }}</p>
+                    <p-divider />
+                    <div class="flex flex-row items-center justify-between">
+                        <div class="flex flex-1 flex-row items-center">
+                            <p-chip styleClass="pl-0 pr-3">
+                                <span class="flex h-[2rem] w-[2rem] items-center justify-center rounded-full bg-indigo-300">
+                                    {{ $user().label }}
+                                </span>
+                                <span class="ml-1 font-medium">
+                                    {{ $user().username }}
+                                </span>
+                            </p-chip>
+                        </div>
+                        <div class="flex flex-row items-center gap-2 text-slate-400">
+                            <i class="pi pi-calendar-clock text-sm"></i>
+                            <p class="text-xs">{{ task.endDate | date:'MMM d yyyy' }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            
         }
         </div>
     </div>
