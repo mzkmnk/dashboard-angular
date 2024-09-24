@@ -95,12 +95,14 @@ export class TimelineComponent {
     }
     Object.keys(this.tasksPosition).forEach((key) => {
       const [
-        startX,endX 
+        startX,
+        endX 
       ] = [
-        this.tasksPosition[Number(key)].left,this.tasksPosition[Number(key)].width 
+        this.tasksPosition[Number(key)].left,
+        this.tasksPosition[Number(key)].width 
       ]
       console.log(startX,endX);
-      if(startX <= left && width <= endX){
+      if(startX <= left || width <= endX){
         top += 700;
       }
     })
