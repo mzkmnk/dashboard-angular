@@ -104,7 +104,7 @@ export class TimelineComponent {
       ]
       console.log(startX,endX);
       if(startX <= left || width <= endX){
-        top += 700;
+        top += 190;
       }
     })
     console.log(task.id);
